@@ -1,4 +1,4 @@
-##전체 카테고리 정보를 딕셔너리 형태로 (상하위 카테고리 정보를 담아서) 저장
+##전체 카테고리 정보(depth=3)를 딕셔너리 형태로 (상하위 카테고리 정보를 담아서) 저장
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import requests

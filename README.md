@@ -32,3 +32,7 @@ docker-compose ps
 
 - mysql에 user 테이블에 데이터 수동으로 추가
     - 에어플로우 trigger
+
+
+
+
