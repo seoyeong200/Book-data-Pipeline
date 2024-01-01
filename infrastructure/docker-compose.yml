@@ -75,13 +75,7 @@ services:
         container_name: zookeeper
         image: psyoblade/data-engineer-zookeeper:1.0
         ports:
-            - "2181:2181"
-
-    
-
-    # airflow:
-    #     image: docker pull jupyter/base-notebook:python-3.7.3
-    #     restart: always        
+            - "2181:2181" 
 
 
 networks:
