@@ -43,6 +43,13 @@ def get_book_page_urls(bsObject):
   return book_page_urls
 
 
+def get_book_data(bsObject):
+  title, image, description = get_book_data_title_image_description(bsObject)
+  url = bsObject.find('meta', {'property':'og:url'}).get('content')
+  author = get_book_data_author(bsObject)
+  return title, image, description, url, author
+
+
 def get_book_data_title_image_description(bsObject):
     title = bsObject.find('meta', {'property':'og:title'}).get('content')
     image = bsObject.find('meta', {'property':'og:image'}).get('content')
@@ -83,7 +90,6 @@ def crawl_books():
     print (f"현재 카테고리 이름: {code}")
     for page in range(1,3):
         url = category[code]+'&tab=top100&list_type=list&sort_type=publishday&page={page}'.format(page=page)
-
         # 네이버의 베스트셀러 웹페이지 정보
         driver.get(url)
         bsObject = BeautifulSoup(driver.page_source, 'html.parser')
@@ -101,10 +107,7 @@ def crawl_books():
 
             if result[0] == 0: # bid가 sql에 이미 저장되어있지 않으면 세부내용스크래핑 start
                 bsObject = BeautifulSoup(driver.page_source, 'html.parser')
-                title, image, description = get_book_data_title_image_description(bsObject)
-                url = bsObject.find('meta', {'property':'og:url'}).get('content')
-                author = get_book_data_author(bsObject)
-                
+                title, image, description, url, author = get_book_data(bsObject)
                 try:
                   save_data({'bid':bid, 
                              'title':title, 
