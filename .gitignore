@@ -3,6 +3,10 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudiocode,python
 
 ### macOS ###
+# personal
+infrastructure/mysql/
+deprecated/
+
 # General
 .DS_Store
 .AppleDouble
