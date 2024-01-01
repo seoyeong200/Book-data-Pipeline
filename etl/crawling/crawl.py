@@ -30,73 +30,91 @@ def get_category():
   return category
 
 
-def crawl_books():
-  category = get_category()
-  print(category)
+def get_book_page_urls(bsObject):
+  # 책의 상세 웹페이지 주소를 추출하여 저장하는 리스트
+  book_page_urls = []
+  for index in range(0, 20): 
+    dl_data = bsObject.find('dt', {'id':"book_title_"+str(index)})
+    if dl_data==None or dl_data.find('img',{'class':"adult"}) : #성인 인증 도서
+          break #건너뛰기
+    link = dl_data.select('a')[0].get('href')
+    book_page_urls.append(link)
 
+  return book_page_urls
+
+
+def get_book_data_title_image_description(bsObject):
+    title = bsObject.find('meta', {'property':'og:title'}).get('content')
+    image = bsObject.find('meta', {'property':'og:image'}).get('content')
+    try:
+        description = bsObject.find(id='bookIntroContent').p.string
+        if description == None:
+            description = str(bsObject.find(id='bookIntroContent').p)
+            while True:
+                if description.find('<') == -1:
+                    break
+                start = description.find('<'); end = description.find('>')
+                description = description.replace(description[start:end+1], '')
+        description = re.sub('[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]', '', description)
+        if len(description) > 3000:
+            description = description[:3000]    
+        return title, image, description  
+    
+    except Exception as e:
+        print("e ") #TODO to logging system
+
+
+def get_book_data_author(bsObject):
+  try:
+    author = bsObject.find('dt', text='저자').find_next_siblings('dd')[0].text.strip()
+  except:
+    author = '저자정보없음'
+  return author
+   
+
+def crawl_books():
   driver = webdriver.Chrome(ChromeDriverManager().install())
   driver.implicitly_wait(30)
 
+  category = get_category()
+
   for code in category:
-    # if code=='소설':
-    #   continue
+    # if code=='소설': continue
     print (f"현재 카테고리 이름: {code}")
     for page in range(1,3):
-      url = category[code]+'&tab=top100&list_type=list&sort_type=publishday&page={page}'.format(page=page)
-      print(url)
-      # 네이버의 베스트셀러 웹페이지 정보
-      driver.get(url)
-      bsObject = BeautifulSoup(driver.page_source, 'html.parser')
+        url = category[code]+'&tab=top100&list_type=list&sort_type=publishday&page={page}'.format(page=page)
 
-      # 책의 상세 웹페이지 주소를 추출하여 저장하는 리스트
-      book_page_urls = []
+        # 네이버의 베스트셀러 웹페이지 정보
+        driver.get(url)
+        bsObject = BeautifulSoup(driver.page_source, 'html.parser')
 
-      for index in range(0, 20): 
-        dl_data = bsObject.find('dt', {'id':"book_title_"+str(index)})
-        if dl_data==None or dl_data.find('img',{'class':"adult"}) : #성인 인증 도서
-              break #건너뛰기
-        link = dl_data.select('a')[0].get('href')
-        book_page_urls.append(link)
-      
-      #리스트로 받아온 책의 각 세부 url 안에 들어가서 순위, 제목, 저자, 이미지, 책내용 받아오기
-      for index, book_page_url in enumerate(book_page_urls):
-        driver.get(book_page_url)
-        bid = book_page_url.split("bid=")[1]
+        book_page_urls = get_book_page_urls(bsObject)
+        
+        #리스트로 받아온 책의 각 세부 url 안에 들어가서 순위, 제목, 저자, 이미지, 책내용 받아오기
+        for index, book_page_url in enumerate(book_page_urls):
+            driver.get(book_page_url)
+            bid = book_page_url.split("bid=")[1]
 
-        sql = """SELECT COUNT(*) FROM items WHERE book_id = '""" + bid + """';"""
-        cursor.execute(sql)
-        result = cursor.fetchone()
-        if result[0] == 0: # bid가 sql에 이미 저장되어있지 않으면 세부내용스크래핑 start
-          bsObject = BeautifulSoup(driver.page_source, 'html.parser')
+            sql = """SELECT COUNT(*) FROM items WHERE book_id = '""" + bid + """';"""
+            cursor.execute(sql)
+            result = cursor.fetchone()
+
+            if result[0] == 0: # bid가 sql에 이미 저장되어있지 않으면 세부내용스크래핑 start
+                bsObject = BeautifulSoup(driver.page_source, 'html.parser')
+                title, image, description = get_book_data_title_image_description(bsObject)
+                url = bsObject.find('meta', {'property':'og:url'}).get('content')
+                author = get_book_data_author(bsObject)
                 
-          title = bsObject.find('meta', {'property':'og:title'}).get('content')
-          image = bsObject.find('meta', {'property':'og:image'}).get('content')
-          try:
-            description = bsObject.find(id='bookIntroContent').p.string
-            if description == None:
-                description = str(bsObject.find(id='bookIntroContent').p)
-                while True:
-                    if description.find('<') == -1:
-                        break
-                    start = description.find('<'); end = description.find('>')
-                    description = description.replace(description[start:end+1], '')
-            description = re.sub('[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]', '', description)
-            if len(description) > 3000:
-                description = description[:3000]      
-          except Exception as e:
-            print("e ")
-
-          url = bsObject.find('meta', {'property':'og:url'}).get('content')
-          try:
-            author = bsObject.find('dt', text='저자').find_next_siblings('dd')[0].text.strip()
-          except:
-            author = '저자정보없음'
-          print(title,"  스크래핑 성공", description[:10])
-          try:
-            save_data({'bid':bid, 'title':title, 'author':"'"+author+"'", 'image':"'"+image+"'", 'rank':str(20*(page-1)+index+1), 'description':description, 'category':code})
-          except:
-            print(title, "sql 실패")
-          # csvfile.writerow([field, sub_field, sub_sub_field, 20*(page-1)+index+1, title, author, description, image])
+                try:
+                  save_data({'bid':bid, 
+                             'title':title, 
+                             'author':"'"+author+"'", 
+                             'image':"'"+image+"'", 
+                             'rank':str(20*(page-1)+index+1), 
+                             'description':description, 
+                             'category':code})
+                except:
+                  print(title, "sql 실패")
 
 
 # mysql에 책 하나 저장
