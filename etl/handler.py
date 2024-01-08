@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 from tempfile import mkdtemp
 import json
 
-from etl.crawling.crawl import BookDataScrapper
+from crawl import BookDataScrapper
 
 
 def handler(event=None, context=None):
@@ -36,7 +36,7 @@ def handler(event=None, context=None):
     chrome = webdriver.Chrome(options=options, service=service)
     chrome.get("https://example.com/")
 
-    scrapper = BookDataScrapper()
+    scrapper = BookDataScrapper(chrome)
     book_info = scrapper.crawl_books()
 
     return book_info

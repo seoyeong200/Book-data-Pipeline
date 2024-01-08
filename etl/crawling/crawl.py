@@ -1,13 +1,13 @@
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+# from selenium import webdriver
+# from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
-from etl.crawling.getter import *
-from etl.crawling.mysql_dml import *
+from getter import *
+# from mysql_dml import *
 
 class BookDataScrapper:
-   def __init__(self) -> None:
-      self.driver = webdriver.Chrome(ChromeDriverManager().install())
+   def __init__(self, chrome) -> None:
+      self.driver = chrome
       self.driver.implicitly_wait(30)
 
    def crawl_books(self):
@@ -29,20 +29,20 @@ class BookDataScrapper:
                 self.driver.get(book_page_url)
                 bid = book_page_url.split("bid=")[1]
 
-                sql = """SELECT COUNT(*) FROM items WHERE book_id = '""" + bid + """';"""
-                cursor.execute(sql)
-                result = cursor.fetchone()
+                # sql = """SELECT COUNT(*) FROM items WHERE book_id = '""" + bid + """';"""
+                # cursor.execute(sql)
+                # result = cursor.fetchone()
 
-                if result[0] == 0: # bid가 sql에 이미 저장되어있지 않으면 세부내용스크래핑 start
-                    bsObject = BeautifulSoup(self.driver.page_source, 'html.parser')
-                    title, image, description, url, author = get_book_data(bsObject)
-                    return {'bid':bid, 
-                                'title':title, 
-                                'author':"'"+author+"'", 
-                                'image':"'"+image+"'", 
-                                'rank':str(20*(page-1)+index+1), 
-                                'description':description, 
-                                'category':code}
+                # if result[0] == 0: # bid가 sql에 이미 저장되어있지 않으면 세부내용스크래핑 start
+                bsObject = BeautifulSoup(self.driver.page_source, 'html.parser')
+                title, image, description, url, author = get_book_data(bsObject)
+                return {'bid':bid, 
+                            'title':title, 
+                            'author':"'"+author+"'", 
+                            'image':"'"+image+"'", 
+                            'rank':str(20*(page-1)+index+1), 
+                            'description':description, 
+                            'category':code}
                     # try:
                     #   save_data({'bid':bid, 
                     #             'title':title, 
