@@ -1,8 +1,18 @@
+# def hello(event, context):
+#     body = {
+#         "message": "Go Serverless v3.0! Your function executed successfully!",
+#         "input": event,
+#     }
+
+#     return {"statusCode": 200, "body": json.dumps(body)}
+
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from tempfile import mkdtemp
 import json
 
+from etl.crawling.crawl import BookDataScrapper
 
 
 def handler(event=None, context=None):
@@ -26,5 +36,9 @@ def handler(event=None, context=None):
     chrome = webdriver.Chrome(options=options, service=service)
     chrome.get("https://example.com/")
 
-    return chrome.find_element(by=By.XPATH, value="//html").text
+    scrapper = BookDataScrapper()
+    book_info = scrapper.crawl_books()
+
+    return book_info
+    # return chrome.find_element(by=By.XPATH, value="//html").text
 

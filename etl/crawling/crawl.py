@@ -36,20 +36,27 @@ class BookDataScrapper:
                 if result[0] == 0: # bid가 sql에 이미 저장되어있지 않으면 세부내용스크래핑 start
                     bsObject = BeautifulSoup(self.driver.page_source, 'html.parser')
                     title, image, description, url, author = get_book_data(bsObject)
-                    try:
-                      save_data({'bid':bid, 
+                    return {'bid':bid, 
                                 'title':title, 
                                 'author':"'"+author+"'", 
                                 'image':"'"+image+"'", 
                                 'rank':str(20*(page-1)+index+1), 
                                 'description':description, 
-                                'category':code})
-                    except:
-                      print(title, "sql 실패")
+                                'category':code}
+                    # try:
+                    #   save_data({'bid':bid, 
+                    #             'title':title, 
+                    #             'author':"'"+author+"'", 
+                    #             'image':"'"+image+"'", 
+                    #             'rank':str(20*(page-1)+index+1), 
+                    #             'description':description, 
+                    #             'category':code})
+                    # except:
+                    #   print(title, "sql 실패")
 
-if __name__=="__main__":
-  scrapper = BookDataScrapper()
-  scrapper.crawl_books()
+# if __name__=="__main__":
+#   scrapper = BookDataScrapper()
+#   scrapper.crawl_books()
 
 
 

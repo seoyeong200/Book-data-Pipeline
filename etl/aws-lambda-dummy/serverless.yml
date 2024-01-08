@@ -16,10 +16,9 @@ provider:
         platform: linux/amd64
 
 functions:
-  hello:
-    handler: handler.hello
+  handler:
     timeout: 60
       # If you experience any errors such as Chrome crashing or not being available you might need to increase the storage available to your Lambda Function. See #102
-      memorySize: 2048
-      image:
-        name: img
+    memorySize: 2048
+    image:
+      name: img
