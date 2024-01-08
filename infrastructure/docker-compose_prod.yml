@@ -1,0 +1,84 @@
+version: "3"
+
+services:
+    sqoop:
+        container_name: sqoop
+        image: psyoblade/data-engineer-sqoop:2.0
+        tty: true
+        environment: 
+            LANG: ko_KR.UTF-8
+        ports:
+            - '8042:8042'
+            - '8088:8088'
+            - '10020:10020'
+            - '19888:19888'
+            - '60070:50070'
+            - '60075:50075'
+        networks:
+            - default
+        depends_on: 
+            - mysql
+        volumes:
+            - ./sqoop/jars:/jdbc
+            - ./notebooks:/tmp/target
+
+    # notebook:
+    #     container_name: notebook
+    #     user: root
+    #     privileged: true
+    #     image: psyoblade/data-engineer-notebook:1.6
+    #     restart: always
+    #     depends_on:
+    #     - mysql
+    #     - mongodb
+    #     links:
+    #     - mysql
+    #     volumes:
+    #     - ./notebooks:/home/jovyan/work
+    #     environment:
+    #     - GRANT_SUDO=yes
+    #     ports:
+    #     - "4040:4040"
+    #     - "4041:4041"
+    #     - "4042:4042"
+    #     - "4043:4043"
+    #     - "8080:8080"
+    #     - "8888:8888"
+
+    spark:
+        image: docker.io/bitnami/spark:3.5
+        environment:
+        - SPARK_MODE=master
+        - SPARK_RPC_AUTHENTICATION_ENABLED=no
+        - SPARK_RPC_ENCRYPTION_ENABLED=no
+        - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+        - SPARK_SSL_ENABLED=no
+        - SPARK_USER=spark
+        ports:
+        - '8080:8080'
+
+    spark-worker:
+        image: docker.io/bitnami/spark:3.5
+        environment:
+        - SPARK_MODE=worker
+        - SPARK_MASTER_URL=spark://spark:7077
+        - SPARK_WORKER_MEMORY=1G
+        - SPARK_WORKER_CORES=1
+        - SPARK_RPC_AUTHENTICATION_ENABLED=no
+        - SPARK_RPC_ENCRYPTION_ENABLED=no
+        - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+        - SPARK_SSL_ENABLED=no
+        - SPARK_USER=spark
+
+    zookeeper:
+        container_name: zookeeper
+        image: psyoblade/data-engineer-zookeeper:1.0
+        ports:
+            - "2181:2181"
+
+     
+
+
+networks:
+  default:
+    name: default_network
