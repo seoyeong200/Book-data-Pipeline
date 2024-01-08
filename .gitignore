@@ -6,7 +6,7 @@
 # personal
 infrastructure/mysql/
 deprecated/
-
+lambda/*.zip
 # General
 .DS_Store
 .AppleDouble
