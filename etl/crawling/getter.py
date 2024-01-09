@@ -12,11 +12,10 @@ def get_category():
 
   category = {} 
   a = bs.find(id='left_category').find_all('a')
-  print("1. a: ",a)
 
   for i in range(len(a)):
     temp = a[i].get('cate')
-    if (temp):
+    if temp and len(temp) > 3:
       category[a[i].string]='https://book.naver.com/category/index.nhn?cate_code={code}'.format(code = temp)
   return category
 
@@ -35,39 +34,16 @@ def get_book_page_urls(bsObject):
 
 
 def get_book_data(bsObject):
-  title, image, description = get_book_data_title_image_description(bsObject)
-  url = bsObject.find('meta', {'property':'og:url'}).get('content')
-  author = get_book_data_author(bsObject)
-  return title, image, description, url, author
+    # import re
+    with open("tmp.txt", 'w') as f:
+       f.write(str(bsObject))
+    title = bsObject.find('h2', {'class': 'bookTitle_book_name__JuBQ2'}).text
+    subtitle = bsObject.find('span', {'class': 'bookTitle_sub_title__B0uMS'}).text
+    author = bsObject.find('span', {'class': 'bookTitle_inner_content__REoK1'}).text
+    description = bsObject.find('div', {'class': 'bookIntro_introduce_area__NJbWv'}).text
+    image = bsObject.find('div', {'class': 'bookImage_img_wrap__HWUgc'}).find('img')['src']
+
+    return [title, subtitle, author, description, image]  
 
 
-def get_book_data_title_image_description(bsObject):
-    import re
-
-    title = bsObject.find('meta', {'property':'og:title'}).get('content')
-    image = bsObject.find('meta', {'property':'og:image'}).get('content')
-    try:
-        description = bsObject.find(id='bookIntroContent').p.string
-        if description == None:
-            description = str(bsObject.find(id='bookIntroContent').p)
-            while True:
-                if description.find('<') == -1:
-                    break
-                start = description.find('<'); end = description.find('>')
-                description = description.replace(description[start:end+1], '')
-        description = re.sub('[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]', '', description)
-        if len(description) > 3000:
-            description = description[:3000]    
-        return title, image, description  
-    
-    except Exception as e:
-        print("e ") #TODO to logging system
-
-
-def get_book_data_author(bsObject):
-  try:
-    author = bsObject.find('dt', text='저자').find_next_siblings('dd')[0].text.strip()
-  except:
-    author = '저자정보없음'
-  return author
    
