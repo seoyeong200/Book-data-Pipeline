@@ -27,7 +27,7 @@ def create_user_table():
     '''
     cursor.execute(sql)
 
-def create_user_likes_table()
+def create_user_likes_table():
     sql = '''
     create table user_likes(
         user_id INT not null,

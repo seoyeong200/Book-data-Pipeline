@@ -36,5 +36,7 @@ docker-compose ps
     - 에어플로우 trigger
 
 
+```bash
 
+```
 

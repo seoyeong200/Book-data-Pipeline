@@ -38,6 +38,7 @@ def handler(event=None, context=None):
 
     scrapper = BookDataScrapper(chrome)
     book_info = scrapper.crawl_books()
+    print(book_info)
 
     return book_info
     # return chrome.find_element(by=By.XPATH, value="//html").text
