@@ -1,19 +1,15 @@
-# def hello(event, context):
-#     body = {
-#         "message": "Go Serverless v3.0! Your function executed successfully!",
-#         "input": event,
-#     }
-
-#     return {"statusCode": 200, "body": json.dumps(body)}
-
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from tempfile import mkdtemp
+
+import boto3
+from botocore.exceptions import ClientError
 import json
 
-from crawl import BookDataScrapper
+from etl.crawling.crawl import BookDataScrapper
 
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('ingested_book')
 
 def handler(event=None, context=None):
     options = webdriver.ChromeOptions()
