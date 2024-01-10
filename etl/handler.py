@@ -5,11 +5,16 @@ from tempfile import mkdtemp
 import boto3
 from botocore.exceptions import ClientError
 import json
+import os
 
 from etl.crawling.crawl import BookDataScrapper
 
+os.environ['AWS_DEFAULT_REGION'] = "ap-northeast-2"
+os.environ['TABLE_NAME'] = "ingested_book_table"
+
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ingested_book')
+table_name = os.environ['TABLE_NAME']
+table = dynamodb.Table(table_name)
 
 def handler(event=None, context=None):
     options = webdriver.ChromeOptions()
@@ -35,6 +40,10 @@ def handler(event=None, context=None):
     scrapper = BookDataScrapper(chrome)
     book_info = scrapper.crawl_books()
     print(book_info)
+
+    table.put_item(Item=book_info)
+
+    table.get_item(Key={"bid": "18123571"})
 
     return book_info
     # return chrome.find_element(by=By.XPATH, value="//html").text
