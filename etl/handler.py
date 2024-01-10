@@ -7,7 +7,8 @@ from botocore.exceptions import ClientError
 import json
 import os
 
-from etl.crawling.crawl import BookDataScrapper
+from etl.crawling.book_data_scrapper import BookDataScrapper
+from etl.crawling.book_url_getter import BookURLGetter
 
 os.environ['AWS_DEFAULT_REGION'] = "ap-northeast-2"
 os.environ['TABLE_NAME'] = "ingested_book_table"
@@ -17,6 +18,7 @@ table_name = os.environ['TABLE_NAME']
 table = dynamodb.Table(table_name)
 
 def handler(event=None, context=None):
+    #TODO event must contain category list-> event['category']
     options = webdriver.ChromeOptions()
     service = webdriver.ChromeService("/opt/chromedriver")
 
@@ -36,6 +38,9 @@ def handler(event=None, context=None):
 
     chrome = webdriver.Chrome(options=options, service=service)
     chrome.get("https://example.com/")
+    
+    url_getter = BookURLGetter(event['category'])
+    book_page_urls = url_getter.get_book_page_urls()
 
     scrapper = BookDataScrapper(chrome)
     book_info = scrapper.crawl_books()
@@ -43,7 +48,7 @@ def handler(event=None, context=None):
 
     table.put_item(Item=book_info)
 
-    table.get_item(Key={"bid": "18123571"})
+    # table.get_item(Key={"bid": "18123571"})
 
     return book_info
     # return chrome.find_element(by=By.XPATH, value="//html").text
