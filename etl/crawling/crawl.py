@@ -2,8 +2,7 @@ from selenium import webdriver
 # from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
-from getter import *
-# from etl.crawling.getter import *
+from etl.crawling.getter import *
 # from mysql_dml import *
 
 class BookDataScrapper:
