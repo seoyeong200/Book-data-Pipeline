@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
+import time, random
 
-from src.etl.crawling.getter import *
 
 class BookDataScrapper():
    def __init__(self, chrome: object, book_page_url: list) -> None:
@@ -15,10 +15,11 @@ class BookDataScrapper():
             print(item)
             code, page, urls = item
             for url in urls:
+               time.sleep(random.uniform(1, 3))
                self.driver.get(url)
                bid = url.split("bid=")[1]
 
-               book_data = get_book_data(BeautifulSoup(self.driver.page_source, 'html.parser'))
+               book_data = self.get_book_data(BeautifulSoup(self.driver.page_source, 'html.parser'))
 
                if book_data is None: continue
                

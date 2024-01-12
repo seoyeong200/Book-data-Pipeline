@@ -1,14 +1,14 @@
 {
   "service": {
-    "service": "aws-lambda-dummy",
+    "service": "book-data-pipeline",
     "serviceObject": {
-      "name": "aws-lambda-dummy"
+      "name": "book-data-pipeline"
     },
     "provider": {
       "name": "aws",
       "runtime": "python3.9",
       "stage": "prod",
-      "region": "us-east-1",
+      "region": "ap-northeast-2",
       "ecr": {
         "images": {
           "img": {
@@ -94,7 +94,7 @@
           "HandlerLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/aws-lambda-dummy-prod-handler"
+              "LogGroupName": "/aws/lambda/book-data-pipeline-prod-handler"
             }
           },
           "IamRoleLambdaExecution": {
@@ -122,7 +122,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "aws-lambda-dummy",
+                        "book-data-pipeline",
                         "prod",
                         "lambda"
                       ]
@@ -140,7 +140,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/aws-lambda-dummy-prod*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/book-data-pipeline-prod*:*"
                           }
                         ]
                       },
@@ -151,7 +151,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/aws-lambda-dummy-prod*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/book-data-pipeline-prod*:*:*"
                           }
                         ]
                       }
@@ -164,7 +164,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "aws-lambda-dummy",
+                    "book-data-pipeline",
                     "prod",
                     {
                       "Ref": "AWS::Region"
@@ -175,60 +175,14 @@
               }
             }
           },
-          "EnterpriseLogAccessIamRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "AWS": "arn:aws:iam::802587217904:root"
-                    },
-                    "Action": "sts:AssumeRole",
-                    "Condition": {
-                      "StringEquals": {
-                        "sts:ExternalId": "ServerlessEnterprise-a6ce38e9-51df-40b2-8ee5-161d857e2c68"
-                      }
-                    }
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": "LogFilterAccess",
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:FilterLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::GetAtt": [
-                              "HandlerLogGroup",
-                              "Arn"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
           "HandlerLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
-                "ImageUri": "280432648345.dkr.ecr.us-east-1.amazonaws.com/serverless-aws-lambda-dummy-prod@sha256:000b57e76ee802ba1cc3ebad9a7f004170541b8a5aa4cc5953ad1c935db7fff7"
+                "ImageUri": "280432648345.dkr.ecr.ap-northeast-2.amazonaws.com/serverless-book-data-pipeline-prod@sha256:e00c6f763157827223158506a7fbba4eb760d06fa9224df5fec43767364ff8dd"
               },
               "PackageType": "Image",
-              "FunctionName": "aws-lambda-dummy-prod-handler",
+              "FunctionName": "book-data-pipeline-prod-handler",
               "MemorySize": 2048,
               "Timeout": 60,
               "Role": {
@@ -242,14 +196,14 @@
               "HandlerLogGroup"
             ]
           },
-          "HandlerLambdaVersionFNN6zVG86QVqWPQGu5Tz1M3mzKufRY8XtJqgFKANQA": {
+          "HandlerLambdaVersionYoSnAUSsPvQmtfBHTzaFLK89fTGkiSvnFHKy0wBv3Q": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HandlerLambdaFunction"
               },
-              "CodeSha256": "000b57e76ee802ba1cc3ebad9a7f004170541b8a5aa4cc5953ad1c935db7fff7"
+              "CodeSha256": "e00c6f763157827223158506a7fbba4eb760d06fa9224df5fec43767364ff8dd"
             }
           }
         },
@@ -259,27 +213,16 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-aws-lambda-dummy-prod-ServerlessDeploymentBucketName"
-            }
-          },
-          "EnterpriseLogAccessIamRole": {
-            "Value": {
-              "Fn::GetAtt": [
-                "EnterpriseLogAccessIamRole",
-                "Arn"
-              ]
-            },
-            "Export": {
-              "Name": "sls-aws-lambda-dummy-prod-EnterpriseLogAccessIamRole"
+              "Name": "sls-book-data-pipeline-prod-ServerlessDeploymentBucketName"
             }
           },
           "HandlerLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HandlerLambdaVersionFNN6zVG86QVqWPQGu5Tz1M3mzKufRY8XtJqgFKANQA"
+              "Ref": "HandlerLambdaVersionYoSnAUSsPvQmtfBHTzaFLK89fTGkiSvnFHKy0wBv3Q"
             },
             "Export": {
-              "Name": "sls-aws-lambda-dummy-prod-HandlerLambdaFunctionQualifiedArn"
+              "Name": "sls-book-data-pipeline-prod-HandlerLambdaFunctionQualifiedArn"
             }
           }
         }
@@ -376,20 +319,36 @@
         "image": {
           "name": "img"
         },
-        "events": [],
-        "name": "aws-lambda-dummy-prod-handler",
+        "events": [
+          {
+            "rate": "rate(10 minutes)",
+            "input": {
+              "category": "소설",
+              "stageParams": {
+                "stage": "dev"
+              }
+            },
+            "inputPath": "$.stageVariables",
+            "inputTransformer": {
+              "inputPathsMap": {
+                "eventTime": "$.time"
+              },
+              "inputTemplate": "{\"time\": <eventTime>, \"category\": \"value1\"}"
+            },
+            "schedule": null
+          }
+        ],
+        "name": "book-data-pipeline-prod-handler",
         "package": {},
         "memory": 2048,
         "vpc": {},
-        "versionLogicalId": "HandlerLambdaVersionFNN6zVG86QVqWPQGu5Tz1M3mzKufRY8XtJqgFKANQA"
+        "versionLogicalId": "HandlerLambdaVersionYoSnAUSsPvQmtfBHTzaFLK89fTGkiSvnFHKy0wBv3Q"
       }
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "initialServerlessConfig": {
-      "org": "seoyeong123",
-      "app": "aws-lambda-dummy",
-      "service": "aws-lambda-dummy",
+      "service": "book-data-pipeline",
       "frameworkVersion": "3",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
@@ -398,16 +357,11 @@
         "$ref": "$[\"service\"][\"functions\"]"
       }
     },
-    "app": "aws-lambda-dummy",
-    "org": "seoyeong123",
     "layers": {},
-    "isDashboardMonitoringPreconfigured": true,
-    "isDashboardAppPreconfigured": true,
-    "orgUid": "a6ce38e9-51df-40b2-8ee5-161d857e2c68",
-    "appUid": "lw1Rz7Wy5KP9zK6Tqx"
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/aws-lambda-dummy/prod/1704697309836-2024-01-08T07:01:49.836Z",
+    "artifactDirectoryName": "serverless/book-data-pipeline/prod/1705053958804-2024-01-12T10:05:58.804Z",
     "artifact": ""
   }
 }
