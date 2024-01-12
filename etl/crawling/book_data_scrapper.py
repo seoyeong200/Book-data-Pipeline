@@ -6,7 +6,7 @@ from etl.crawling.book_url_getter import BookURLGetter
 class BookDataScrapper(BookURLGetter):
    def __init__(self) -> None:
       pass
-
+   
    def crawl_books(self): 
       """
       리스트로 받아온 책의 각 세부 url 안에 들어가서 순위, 제목, 저자, 이미지, 책내용 받아오기

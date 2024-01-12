@@ -42,13 +42,10 @@ def handler(event=None, context=None):
     url_getter = BookURLGetter(event['category'])
     book_page_urls = url_getter.get_book_page_urls()
 
-    scrapper = BookDataScrapper(chrome)
-    book_info = scrapper.crawl_books()
-    print(book_info)
-
-    table.put_item(Item=book_info)
-
-    # table.get_item(Key={"bid": "18123571"})
+    scrapper = BookDataScrapper()
+    for book_info in scrapper.crawl_books():
+        print(book_info)
+        table.put_item(Item=book_info)
 
     return book_info
     # return chrome.find_element(by=By.XPATH, value="//html").text
