@@ -321,19 +321,9 @@
         },
         "events": [
           {
-            "rate": "rate(10 minutes)",
+            "rate": "cron(0 12 * * 2 *)",
             "input": {
-              "category": "소설",
-              "stageParams": {
-                "stage": "dev"
-              }
-            },
-            "inputPath": "$.stageVariables",
-            "inputTransformer": {
-              "inputPathsMap": {
-                "eventTime": "$.time"
-              },
-              "inputTemplate": "{\"time\": <eventTime>, \"category\": \"value1\"}"
+              "category": "소설"
             },
             "schedule": null
           }
@@ -361,7 +351,7 @@
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/book-data-pipeline/prod/1705053958804-2024-01-12T10:05:58.804Z",
+    "artifactDirectoryName": "serverless/book-data-pipeline/prod/1705303803609-2024-01-15T07:30:03.609Z",
     "artifact": ""
   }
 }

@@ -22,14 +22,7 @@ functions:
       name: img
     events:
     - schedule:
-      rate: rate(10 minutes)
+      rate: cron(0 12 * * 2 *)
       input:
        category: '소설'
-       stageParams:
-        stage: dev
-      inputPath: '$.stageVariables'
-      inputTransformer:
-        inputPathsMap:
-          eventTime: '$.time'
-        inputTemplate: '{"time": <eventTime>, "category": "value1"}'
-
+       
