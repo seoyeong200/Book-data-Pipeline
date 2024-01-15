@@ -35,9 +35,10 @@ def handler(event=None, context=None, chrome=None):
         options.add_argument(f"--data-path={mkdtemp()}")
         options.add_argument(f"--disk-cache-dir={mkdtemp()}")
         options.add_argument("--remote-debugging-port=9222")
+        options.add_argument("--user-agent='Mozilla/5.0")
 
         chrome = webdriver.Chrome(options=options, service=service)
-    
+
     url_getter = BookURLGetter(chrome, event['category'])
     url_getter.get_book_page_urls_scrapper()
     book_page_url = url_getter.get_book_page_url()
@@ -47,5 +48,6 @@ def handler(event=None, context=None, chrome=None):
         print(book_info)
         table.put_item(Item=book_info)
 
-    return book_info
+    return
+
 
