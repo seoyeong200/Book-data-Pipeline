@@ -1,6 +1,4 @@
-org: seoyeong123
-app: aws-lambda-dummy
-service: aws-lambda-dummy
+service: book-data-pipeline
 
 frameworkVersion: '3'
 
@@ -8,7 +6,7 @@ provider:
   name: aws
   runtime: python3.9
   stage: ${opt:stage, 'prod'}
-  region: ${env:AWS_REGION, 'us-east-1'}
+  region: ${env:AWS_REGION, 'ap-northeast-2'}
   ecr:
     images:
       img:
@@ -22,3 +20,9 @@ functions:
     memorySize: 2048
     image:
       name: img
+    events:
+      - schedule:
+          rate: cron(0 12 ? * TUE *)
+          input:
+          category: '소설'
+       

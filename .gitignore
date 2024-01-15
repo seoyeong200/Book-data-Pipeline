@@ -7,6 +7,7 @@
 infrastructure/mysql/
 deprecated/
 lambda/*.zip
+.serverless/
 # General
 .DS_Store
 .AppleDouble
