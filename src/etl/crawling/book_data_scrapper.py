@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import time, random
+from ratelimit import limits, sleep_and_retry
 
 
 class BookDataScrapper():
@@ -7,6 +8,8 @@ class BookDataScrapper():
       self.driver = chrome
       self.book_page_url = book_page_url
    
+   @sleep_and_retry
+   @limits(calls=1, period=2) # one request per 2 secs
    def crawl_books(self): 
       """
       리스트로 받아온 책의 각 세부 url 안에 들어가서 순위, 제목, 저자, 이미지, 책내용 받아오기
