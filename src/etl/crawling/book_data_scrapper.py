@@ -21,9 +21,7 @@ class BookDataScrapper():
                time.sleep(random.uniform(1, 3))
                self.driver.get(url)
                bid = url.split("bid=")[1]
-
                book_data = self.get_book_data(BeautifulSoup(self.driver.page_source, 'html.parser'))
-
                if book_data is None: continue
                
                title, subtitle, author, description, image = book_data
@@ -36,14 +34,21 @@ class BookDataScrapper():
                      'rank':str(20*(page-1)+index+1), 
                      'description':description, 
                      'category':code}
-      
+
    @staticmethod
    def get_book_data(bsObject):
-      title = bsObject.find('h2', {'class': 'bookTitle_book_name__JuBQ2'}).text
-      subtitle = bsObject.find('span', {'class': 'bookTitle_sub_title__B0uMS'}).text
-      author = bsObject.find('span', {'class': 'bookTitle_inner_content__REoK1'}).text
-      description = bsObject.find('div', {'class': 'bookIntro_introduce_area__NJbWv'}).text
-      image = bsObject.find('div', {'class': 'bookImage_img_wrap__HWUgc'}).find('img')['src']
+      def get_text(tag: str, class_name: str) -> str:
+         element = bsObject.find(tag, {'class': class_name})
+         return element.text if element else ''
+
+      title = get_text('h2', 'bookTitle_book_name__JuBQ2')
+      subtitle = get_text('span', 'bookTitle_sub_title__B0uMS')
+      author = get_text('span', 'bookTitle_inner_content__REoK1')
+      description = get_text('div', 'bookIntro_introduce_area__NJbWv')
+      try:
+         image = bsObject.find('div', {'class': 'bookImage_img_wrap__HWUgc'}).find('img')['src']
+      except:
+         image = ''
 
       return [title, subtitle, author, description, image]  
 
