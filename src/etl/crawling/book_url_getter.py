@@ -1,7 +1,7 @@
 import os, json
 from bs4 import BeautifulSoup
 
-from src.etl.utils.config import get_workdir
+from etl.utils.config import get_workdir
 
 
 class BookURLGetter:
