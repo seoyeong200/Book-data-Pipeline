@@ -5,4 +5,3 @@ RUN pip install requests \
 COPY src ${LAMBDA_TASK_ROOT}/src
 COPY src/etl/handler.py ${LAMBDA_TASK_ROOT}/handler.py
 CMD [ "handler.handler" ]
-# ENTRYPOINT [ "/bin/bash" , "test/test_handler.py"]

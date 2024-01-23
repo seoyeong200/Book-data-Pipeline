@@ -41,15 +41,16 @@ def handler(event=None, context=None, chrome=None):
 
             return webdriver.Chrome(options=options, service=service)
         return chrome
-
-    url_getter = BookURLGetter(driver_getter(), event['category'])
-    url_getter.get_book_page_urls_scrapper()
-    book_page_url = url_getter.get_book_page_url()
     
-    scrapper = BookDataScrapper(driver_getter(), book_page_url)
-    for book_info in scrapper.crawl_books():
-        print(book_info)
-        table.put_item(Item=book_info)
+    for c in event['category']:
+        url_getter = BookURLGetter(chrome=driver_getter(), category=c)
+        url_getter.get_book_page_urls_scrapper()
+        book_page_url = url_getter.get_book_page_url()
+        
+        scrapper = BookDataScrapper(chrome=driver_getter(), book_page_url=book_page_url)
+        for book_info in scrapper.crawl_books():
+            print(book_info)
+            table.put_item(Item=book_info)
 
     return
 
