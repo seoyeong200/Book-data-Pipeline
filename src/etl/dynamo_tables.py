@@ -10,9 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 class DynamoTables():
-    def __init__(self, dyn_resource, table_name) -> None:
+    def __init__(self, dyn_resource) -> None:
         self.dyn_resource = dyn_resource
-        self.table=dyn_resource.Table(table_name)
+        self.table=None
 
     def exists(self, table_name):
         try:
@@ -47,6 +47,9 @@ class DynamoTables():
                 err.response["Error"]["Message"],
             )
             raise
+    
+    def get_response_of_category(self, category):
+        return self.table.query(KeyConditionExpression=Key("category").eq(category))
 
     def add_item(self, info):
         """
@@ -71,13 +74,28 @@ class DynamoTables():
                 )
 
             if self.table.name == "metatable":
-                self.table.update_item(
-                    Key={"category":info['category']},
-                    UpdateExpression="set info.date=:date_val, info.statue=:status_val",
-                    ExpressionAttributeValues={":date_val": get_date(), 
-                                               ":status_val": info['status']},
-                    ReturnValues="UPDATED_NEW",
-                )
+                response = self.get_response_of_category(info['category'])
+                if response["Count"] == 0:
+                    self.table.put_item(
+                        Item={
+                            "category": info['category'],
+                            "latest_date": get_date(),
+                            "job_status": info['status']
+                        }
+                    )
+                else:
+                    self.table.update_item(
+                        Key={"category":info['category']},
+                        UpdateExpression="set #info.latest_date=:date_val, #info.job_status=:status_val",
+                        ExpressionAttributeValues={
+                            ":date_val": get_date(), 
+                            ":status_val": info['status']
+                        },
+                        ExpressionAttributeNames={
+                            "#info": "info"
+                        },
+                        ReturnValues="UPDATED_NEW",
+                    )
 
         except ClientError as err:
             logger.error(
@@ -96,9 +114,9 @@ class DynamoTables():
         category parameter was already scrapped or not.
         """
         try:
-            response = self.table.query(KeyConditionExpression=Key("category").eq(category))
-            scrapped_date = response["Items"]["date"]
-            scrapped_status = response["Items"]["status"]
+            response = self.get_response_of_category(category)
+            scrapped_date = response["Items"]["latest_date"]
+            scrapped_status = response["Items"]["job_status"]
             if (is_same_week(scrapped_date) and scrapped_status == 'SUCCESS') \
                 or not is_same_week(scrapped_date):
                 return True

@@ -39,11 +39,11 @@ def handler(event=None, context=None, chrome=None):
     
     for c in event['category']:
         try:
-            book_table = DynamoTables(dynamodb, "ingested_book_table")
-            meta_table = DynamoTables(dynamodb, "metatable")
+            book_table = DynamoTables(dynamodb)
+            meta_table = DynamoTables(dynamodb)
 
-            if not book_table.exists() \
-                or not meta_table.exists() \
+            if not book_table.exists("ingested_book_table") \
+                or not meta_table.exists("metatable") \
                 or meta_table.already_gathered_category(c):
                 continue
 
