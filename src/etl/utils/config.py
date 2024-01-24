@@ -9,4 +9,12 @@ def get_workdir():
 
 def get_date():
     from datetime import date
-    return date.today()
+    return str(date.today())
+
+
+def is_same_week(dateString):
+    import datetime
+    d1 = datetime.datetime.strptime(dateString,'%Y-%m-%d')
+    d2 = datetime.datetime.today()
+    return d1.isocalendar()[1] == d2.isocalendar()[1] \
+              and d1.year == d2.year

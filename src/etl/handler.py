@@ -1,21 +1,16 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from tempfile import mkdtemp
 
 import boto3
-from botocore.exceptions import ClientError
 import json
 import os
 
-from etl.crawling.book_data_scrapper import BookDataScrapper
-from etl.crawling.book_url_getter import BookURLGetter
+from crawling.book_data_scrapper import BookDataScrapper
+from crawling.book_url_getter import BookURLGetter
+from dynamo_tables import DynamoTables
 
-os.environ['AWS_DEFAULT_REGION'] = "ap-northeast-2"
-os.environ['TABLE_NAME'] = "ingested_book_table"
 
 dynamodb = boto3.resource('dynamodb')
-table_name = os.environ['TABLE_NAME']
-table = dynamodb.Table(table_name)
 
 def handler(event=None, context=None, chrome=None):
 
@@ -43,20 +38,28 @@ def handler(event=None, context=None, chrome=None):
         return chrome
     
     for c in event['category']:
-        url_getter = BookURLGetter(chrome=driver_getter(), category=c)
-        url_getter.get_book_page_urls_scrapper()
-        book_page_url = url_getter.get_book_page_url()
+        try:
+            book_table = DynamoTables(dynamodb, "ingested_book_table")
+            meta_table = DynamoTables(dynamodb, "metatable")
+
+            if not book_table.exists() \
+                or not meta_table.exists() \
+                or meta_table.already_gathered_category(c):
+                continue
+
+            url_getter = BookURLGetter(chrome=driver_getter(), category=c)
+            url_getter.get_book_page_urls_scrapper()
+            book_page_url = url_getter.get_book_page_url()
+            
+            scrapper = BookDataScrapper(chrome=driver_getter(), book_page_url=book_page_url)
+            for book_info in scrapper.crawl_books():
+                print(book_info)
+                book_table.add_item(Item=book_info)
+            
+            meta_table.add_item({'category': c, 'status': 'SUCCESS'})
         
-        scrapper = BookDataScrapper(chrome=driver_getter(), book_page_url=book_page_url)
-        for book_info in scrapper.crawl_books():
-            print(book_info)
-            table.put_item(Item=book_info)
+        except:
+            meta_table.add_item({'category': c, 'status': 'FAIL'})
 
     return
 
-
-if __name__ == '__main__':
-    # handler(event={'category' : '소설'}, context=None, chrome=None)
-    handler(event={'category' : '시'}, context=None, chrome=None)
-    handler(event={'category' : '에세이1'}, context=None, chrome=None)
-    handler(event={'category' : '에세이2'}, context=None, chrome=None)
