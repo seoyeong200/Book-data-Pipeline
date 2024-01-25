@@ -115,8 +115,15 @@ class DynamoTables():
         """
         try:
             response = self.get_response_of_category(category)
-            scrapped_date = response["Items"]["latest_date"]
-            scrapped_status = response["Items"]["job_status"]
+            if response["Count"] == 0: 
+                logger.info(
+                    "Category %s hasn't been made in metatable yet.",
+                    category
+                )
+                return False
+
+            scrapped_date = response["Items"][0]["latest_date"]
+            scrapped_status = response["Items"][0]["job_status"]
             if (is_same_week(scrapped_date) and scrapped_status == 'SUCCESS') \
                 or not is_same_week(scrapped_date):
                 return True
