@@ -1,7 +1,9 @@
 {
     "소설": {
         "나라별 소설": "https://book.naver.com/category/index.nhn?cate_code=100010",
-        "고전/문학": "https://book.naver.com/category/index.nhn?cate_code=100020",
+        "고전/문학": "https://book.naver.com/category/index.nhn?cate_code=100020"
+    },
+    "소설2": {
         "장르소설": "https://book.naver.com/category/index.nhn?cate_code=100030",
         "테마소설": "https://book.naver.com/category/index.nhn?cate_code=100040"
     },
@@ -11,13 +13,17 @@
     },
     "에세이1": {
         "그림/포토 에세이": "https://book.naver.com/category/index.nhn?cate_code=110080",
-        "독서 에세이": "https://book.naver.com/category/index.nhn?cate_code=110060",
-        "명상 에세이": "https://book.naver.com/category/index.nhn?cate_code=110070",
-        "성공 에세이": "https://book.naver.com/category/index.nhn?cate_code=110050"
+        "독서 에세이": "https://book.naver.com/category/index.nhn?cate_code=110060"
     },
     "에세이2": {
         "여행 에세이": "https://book.naver.com/category/index.nhn?cate_code=110040",
-        "연애/사랑 에세이": "https://book.naver.com/category/index.nhn?cate_code=110090",
+        "연애/사랑 에세이": "https://book.naver.com/category/index.nhn?cate_code=110090"
+    },
+    "에세이3": {
+        "명상 에세이": "https://book.naver.com/category/index.nhn?cate_code=110070",
+        "성공 에세이": "https://book.naver.com/category/index.nhn?cate_code=110050"
+    },
+    "에세이4": {
         "인물 에세이": "https://book.naver.com/category/index.nhn?cate_code=110030",
         "삶의 지혜/명언": "https://book.naver.com/category/index.nhn?cate_code=110100"
     },
@@ -28,7 +34,9 @@
     },
     "자산": {
         "재테크/투자": "https://book.naver.com/category/index.nhn?cate_code=160040",
-        "창업/취업": "https://book.naver.com/category/index.nhn?cate_code=160050",
+        "창업/취업": "https://book.naver.com/category/index.nhn?cate_code=160050"
+    },
+    "자산2": {
         "대화/협상": "https://book.naver.com/category/index.nhn?cate_code=170050",
         "성공/처세": "https://book.naver.com/category/index.nhn?cate_code=170010"
     },
@@ -39,20 +47,26 @@
     },
     "인문학": {
         "인문일반": "https://book.naver.com/category/index.nhn?cate_code=120010",
-        "심리": "https://book.naver.com/category/index.nhn?cate_code=120020",
+        "심리": "https://book.naver.com/category/index.nhn?cate_code=120020"
+    },
+    "인문학2": {
         "교육학": "https://book.naver.com/category/index.nhn?cate_code=120030",
         "철학": "https://book.naver.com/category/index.nhn?cate_code=120040"
     },
     "문학/신학": {
         "문학론": "https://book.naver.com/category/index.nhn?cate_code=120050",
-        "언어학/기호학": "https://book.naver.com/category/index.nhn?cate_code=120060",
+        "언어학/기호학": "https://book.naver.com/category/index.nhn?cate_code=120060"
+    },
+    "문학/신학2": {
         "종교학": "https://book.naver.com/category/index.nhn?cate_code=120070",
         "신화": "https://book.naver.com/category/index.nhn?cate_code=120080"
     },
     "역사학": {
         "역사/문화일반": "https://book.naver.com/category/index.nhn?cate_code=190010",
         "세계사": "https://book.naver.com/category/index.nhn?cate_code=190020",
-        "서양사": "https://book.naver.com/category/index.nhn?cate_code=190030",
+        "서양사": "https://book.naver.com/category/index.nhn?cate_code=190030"
+    },
+    "역사학2": {
         "동양사": "https://book.naver.com/category/index.nhn?cate_code=190040",
         "한국사": "https://book.naver.com/category/index.nhn?cate_code=190050"
     },
@@ -63,7 +77,9 @@
     },
     "사회학": {
         "법": "https://book.naver.com/category/index.nhn?cate_code=180040",
-        "사회학": "https://book.naver.com/category/index.nhn?cate_code=180050",
+        "사회학": "https://book.naver.com/category/index.nhn?cate_code=180050"
+    },
+    "사회학2": {
         "사회복지": "https://book.naver.com/category/index.nhn?cate_code=180060",
         "언론/신문/방송": "https://book.naver.com/category/index.nhn?cate_code=180070"
     },
@@ -74,47 +90,63 @@
     },
     "물리학": {
         "도시/토목/건설": "https://book.naver.com/category/index.nhn?cate_code=250080",
-        "물리학": "https://book.naver.com/category/index.nhn?cate_code=250040",
+        "물리학": "https://book.naver.com/category/index.nhn?cate_code=250040"
+    },
+    "물리학2": {
         "수학": "https://book.naver.com/category/index.nhn?cate_code=250030",
         "건축": "https://book.naver.com/category/index.nhn?cate_code=210040"
     },
     "과학":{
         "쉽게 읽는 과학": "https://book.naver.com/category/index.nhn?cate_code=250010",
-        "의학/식품/생활과학": "https://book.naver.com/category/index.nhn?cate_code=250120",
+        "의학/식품/생활과학": "https://book.naver.com/category/index.nhn?cate_code=250120"
+    },
+    "과학2":{
         "천문/지구과학": "https://book.naver.com/category/index.nhn?cate_code=250070",
-        "화학": "https://book.naver.com/category/index.nhn?cate_code=250050",
+        "화학": "https://book.naver.com/category/index.nhn?cate_code=250050"
+    },
+    "과학3":{
         "생물학": "https://book.naver.com/category/index.nhn?cate_code=250060",
         "농수산/축산": "https://book.naver.com/category/index.nhn?cate_code=250110"
     },
     "예술": {
         "예술일반": "https://book.naver.com/category/index.nhn?cate_code=210010",
-        "미술": "https://book.naver.com/category/index.nhn?cate_code=210020",
+        "미술": "https://book.naver.com/category/index.nhn?cate_code=210020"
+    },
+    "예술2": {
         "음악": "https://book.naver.com/category/index.nhn?cate_code=210030",
         "만화/애니메이션": "https://book.naver.com/category/index.nhn?cate_code=210050",
-        "사진": "https://book.naver.com/category/index.nhn?cate_code=210060",
+        "사진": "https://book.naver.com/category/index.nhn?cate_code=210060"
+    },
+    "예술3": {
         "연극/영화": "https://book.naver.com/category/index.nhn?cate_code=210070",
         "TV/대중문화": "https://book.naver.com/category/index.nhn?cate_code=210080"
     },
     "종교": {
         "기독교(개신교)": "https://book.naver.com/category/index.nhn?cate_code=200020",
         "가톨릭": "https://book.naver.com/category/index.nhn?cate_code=200030",
-        "불교": "https://book.naver.com/category/index.nhn?cate_code=200040",
+        "불교": "https://book.naver.com/category/index.nhn?cate_code=200040"
+    },
+    "종교2": {
         "종교일반": "https://book.naver.com/category/index.nhn?cate_code=200010",
         "기타": "https://book.naver.com/category/index.nhn?cate_code=200050"
     },
     "유아": {
-        "0~3세": "https://book.naver.com/category/index.nhn?cate_code=310010",
-        "4~7세": "https://book.naver.com/category/index.nhn?cate_code=310020",
         "유아놀이책": "https://book.naver.com/category/index.nhn?cate_code=310030",
         "유아그림책": "https://book.naver.com/category/index.nhn?cate_code=310040",
         "유아학습": "https://book.naver.com/category/index.nhn?cate_code=310050"
     },
-    "아동": {
-        "초등1~2학년": "https://book.naver.com/category/index.nhn?cate_code=320010",
-        "초등3~4학년": "https://book.naver.com/category/index.nhn?cate_code=320020",
-        "초등5~6학년": "https://book.naver.com/category/index.nhn?cate_code=320030",
+    "영아": {
+        "0~3세": "https://book.naver.com/category/index.nhn?cate_code=310010",
+        "4~7세": "https://book.naver.com/category/index.nhn?cate_code=310020"
+    },
+    "어린이": {
         "어린이(공통)": "https://book.naver.com/category/index.nhn?cate_code=320040",
         "어린이영어": "https://book.naver.com/category/index.nhn?cate_code=320050"
+    },
+    "초등": {
+        "초등1~2학년": "https://book.naver.com/category/index.nhn?cate_code=320010",
+        "초등3~4학년": "https://book.naver.com/category/index.nhn?cate_code=320020",
+        "초등5~6학년": "https://book.naver.com/category/index.nhn?cate_code=320030"
     },
     "가족": {
         "결혼/가족": "https://book.naver.com/category/index.nhn?cate_code=130010",
@@ -124,46 +156,62 @@
     },
     "헬스케어": {
         "요리": "https://book.naver.com/category/index.nhn?cate_code=340060",
-        "건강정보/에세이": "https://book.naver.com/category/index.nhn?cate_code=140010",
+        "건강정보/에세이": "https://book.naver.com/category/index.nhn?cate_code=140010"
+    },
+    "헬스케어2": {
         "다이어트/미용": "https://book.naver.com/category/index.nhn?cate_code=140030",
-        "요가/헬스": "https://book.naver.com/category/index.nhn?cate_code=140040",
+        "요가/헬스": "https://book.naver.com/category/index.nhn?cate_code=140040"
+    },
+    "헬스케어3": {
         "질병치료/예방": "https://book.naver.com/category/index.nhn?cate_code=140020",
         "건강운동 기타": "https://book.naver.com/category/index.nhn?cate_code=140050"
     },
     "취미1":{
         "꽃꽂이": "https://book.naver.com/category/index.nhn?cate_code=150050",
-        "뜨개질/퀼트/십자수": "https://book.naver.com/category/index.nhn?cate_code=150010",
+        "뜨개질/퀼트/십자수": "https://book.naver.com/category/index.nhn?cate_code=150010"
+    },
+    "취미5":{
         "비즈/구슬공예": "https://book.naver.com/category/index.nhn?cate_code=150020",
         "선물포장/리본공예": "https://book.naver.com/category/index.nhn?cate_code=150030"
     },
     "취미2": {
         "옷만들기": "https://book.naver.com/category/index.nhn?cate_code=150040",
         "가구/DIY": "https://book.naver.com/category/index.nhn?cate_code=150110",
-        "바둑/장기": "https://book.naver.com/category/index.nhn?cate_code=150070",
+        "바둑/장기": "https://book.naver.com/category/index.nhn?cate_code=150070"
+    },
+    "취미6": {
         "사진/비디오": "https://book.naver.com/category/index.nhn?cate_code=150090",
         "애완동물": "https://book.naver.com/category/index.nhn?cate_code=150080"
     },
     "취미3": {
         "원예/조경": "https://book.naver.com/category/index.nhn?cate_code=150100",
-        "퍼즐/스도쿠": "https://book.naver.com/category/index.nhn?cate_code=150060",
+        "퍼즐/스도쿠": "https://book.naver.com/category/index.nhn?cate_code=150060"
+    },
+    "취미7": {
         "골프": "https://book.naver.com/category/index.nhn?cate_code=150130",
         "낚시": "https://book.naver.com/category/index.nhn?cate_code=150150"
     },
     "취미4": {
         "달리기/마라톤": "https://book.naver.com/category/index.nhn?cate_code=150160",
-        "등산": "https://book.naver.com/category/index.nhn?cate_code=150140",
+        "등산": "https://book.naver.com/category/index.nhn?cate_code=150140"
+    },
+    "취미8": {
         "레저/스포츠기타": "https://book.naver.com/category/index.nhn?cate_code=150170",
         "취미기타": "https://book.naver.com/category/index.nhn?cate_code=150120"
     },
     "여행": {
         "국내여행": "https://book.naver.com/category/index.nhn?cate_code=270010",
-        "해외여행": "https://book.naver.com/category/index.nhn?cate_code=270020",
+        "해외여행": "https://book.naver.com/category/index.nhn?cate_code=270020"
+    },
+    "여행2": {
         "테마여행": "https://book.naver.com/category/index.nhn?cate_code=270030",
         "지도/지리": "https://book.naver.com/category/index.nhn?cate_code=270040"
     },
     "언어": {
         "국어": "https://book.naver.com/category/index.nhn?cate_code=230010",
-        "영어": "https://book.naver.com/category/index.nhn?cate_code=230020",
+        "영어": "https://book.naver.com/category/index.nhn?cate_code=230020"
+    },
+    "언어2": {
         "일본어": "https://book.naver.com/category/index.nhn?cate_code=230030",
         "중국어": "https://book.naver.com/category/index.nhn?cate_code=230040",
         "기타 외국어": "https://book.naver.com/category/index.nhn?cate_code=230050"
@@ -172,7 +220,9 @@
         "국어사전": "https://book.naver.com/category/index.nhn?cate_code=240050",
         "한자사전": "https://book.naver.com/category/index.nhn?cate_code=240040",
         "한영/영한/영영사전": "https://book.naver.com/category/index.nhn?cate_code=240010",
-        "일한/한일사전": "https://book.naver.com/category/index.nhn?cate_code=240020",
+        "일한/한일사전": "https://book.naver.com/category/index.nhn?cate_code=240020"
+    },
+    "사전2": {
         "중한/한중사전": "https://book.naver.com/category/index.nhn?cate_code=240030",
         "기타나라어사전": "https://book.naver.com/category/index.nhn?cate_code=240060",
         "백과/전문사전": "https://book.naver.com/category/index.nhn?cate_code=240070"
@@ -192,40 +242,52 @@
     "청소년공부": {
         "청소년 경제/자기계발": "https://book.naver.com/category/index.nhn?cate_code=300040",
         "청소년 과학": "https://book.naver.com/category/index.nhn?cate_code=300080",
-        "청소년 문학": "https://book.naver.com/category/index.nhn?cate_code=300050",
+        "청소년 문학": "https://book.naver.com/category/index.nhn?cate_code=300050"
+    },
+    "청소년공부2": {
         "청소년 예술": "https://book.naver.com/category/index.nhn?cate_code=300070",
         "청소년 인문/사회": "https://book.naver.com/category/index.nhn?cate_code=300060"
     },
     "입시": {
         "고등학교": "https://book.naver.com/category/index.nhn?cate_code=220010",
         "중학교": "https://book.naver.com/category/index.nhn?cate_code=220020",
-        "초등학교": "https://book.naver.com/category/index.nhn?cate_code=220030",
+        "초등학교": "https://book.naver.com/category/index.nhn?cate_code=220030"
+    },
+    "입시2": {
         "논술/면접대비": "https://book.naver.com/category/index.nhn?cate_code=220040",
         "공부방법/진학": "https://book.naver.com/category/index.nhn?cate_code=220050"
     },
     "취업": {
         "취업/상식/적성검사": "https://book.naver.com/category/index.nhn?cate_code=260010",
         "공무원": "https://book.naver.com/category/index.nhn?cate_code=260020",
-        "고시": "https://book.naver.com/category/index.nhn?cate_code=260030",
+        "고시": "https://book.naver.com/category/index.nhn?cate_code=260030"
+    },
+    "취업2": {
         "전문직": "https://book.naver.com/category/index.nhn?cate_code=260040",
         "편입/검정고시": "https://book.naver.com/category/index.nhn?cate_code=260050"
     },
     "오락1": {
         "공포/추리": "https://book.naver.com/category/index.nhn?cate_code=330090",
-        "교양만화": "https://book.naver.com/category/index.nhn?cate_code=330010",
-        "드라마": "https://book.naver.com/category/index.nhn?cate_code=330020",
-        "명랑/코믹만화": "https://book.naver.com/category/index.nhn?cate_code=330080"
+        "교양만화": "https://book.naver.com/category/index.nhn?cate_code=330010"
     },
     "오락2": {
         "순정만화": "https://book.naver.com/category/index.nhn?cate_code=330040",
-        "스포츠만화": "https://book.naver.com/category/index.nhn?cate_code=330050",
-        "액션/무협만화": "https://book.naver.com/category/index.nhn?cate_code=330070",
-        "웹툰/카툰에세이": "https://book.naver.com/category/index.nhn?cate_code=330110"
+        "스포츠만화": "https://book.naver.com/category/index.nhn?cate_code=330050"
     },
     "오락3": {
         "학원만화": "https://book.naver.com/category/index.nhn?cate_code=330100",
         "일본어판 만화": "https://book.naver.com/category/index.nhn?cate_code=330130",
-        "영문판 만화": "https://book.naver.com/category/index.nhn?cate_code=330140",
+        "영문판 만화": "https://book.naver.com/category/index.nhn?cate_code=330140"
+    },
+    "오락4": {
+        "드라마": "https://book.naver.com/category/index.nhn?cate_code=330020",
+        "명랑/코믹만화": "https://book.naver.com/category/index.nhn?cate_code=330080"
+    },
+    "오락5": {
+        "액션/무협만화": "https://book.naver.com/category/index.nhn?cate_code=330070",
+        "웹툰/카툰에세이": "https://book.naver.com/category/index.nhn?cate_code=330110"
+    },
+    "오락6": {
         "SF/판타지": "https://book.naver.com/category/index.nhn?cate_code=330060",
         "기타만화": "https://book.naver.com/category/index.nhn?cate_code=330120"
     },
@@ -234,34 +296,46 @@
     },
     "해외도서1": {
         "인문/사회/종교": "https://book.naver.com/category/index.nhn?cate_code=290020",
-        "문예/교양지": "https://book.naver.com/category/index.nhn?cate_code=290030",
-        "자연/공학": "https://book.naver.com/category/index.nhn?cate_code=290040",
-        "컴퓨터/게임/그래픽": "https://book.naver.com/category/index.nhn?cate_code=290050",
-        "어학/교육": "https://book.naver.com/category/index.nhn?cate_code=290060"
+        "문예/교양지": "https://book.naver.com/category/index.nhn?cate_code=290030"
     },
     "해외도서2": {
-        "예술/대중문화": "https://book.naver.com/category/index.nhn?cate_code=290070",
+        "자연/공학": "https://book.naver.com/category/index.nhn?cate_code=290040",
+        "컴퓨터/게임/그래픽": "https://book.naver.com/category/index.nhn?cate_code=290050"
+    },
+    "해외도서3": {
+        "어학/교육": "https://book.naver.com/category/index.nhn?cate_code=290060",
+        "예술/대중문화": "https://book.naver.com/category/index.nhn?cate_code=290070"
+    },
+    "해외도서4": {
         "취미/여행": "https://book.naver.com/category/index.nhn?cate_code=340070",
-        "외국잡지": "https://book.naver.com/category/index.nhn?cate_code=290090",
+        "외국잡지": "https://book.naver.com/category/index.nhn?cate_code=290090"
+    },
+    "해외도서5": {
         "가족/생활": "https://book.naver.com/category/index.nhn?cate_code=340080",
         "건축/예술": "https://book.naver.com/category/index.nhn?cate_code=340040"
     },
-    "해외도서3": {
+    "해외도서6": {
         "경영경제": "https://book.naver.com/category/index.nhn?cate_code=340030",
-        "과학/공학/수학": "https://book.naver.com/category/index.nhn?cate_code=340120",
+        "과학/공학/수학": "https://book.naver.com/category/index.nhn?cate_code=340120"
+    },
+    "해외도서7": {
         "문학/소설": "https://book.naver.com/category/index.nhn?cate_code=340010",
         "사회/정치/법": "https://book.naver.com/category/index.nhn?cate_code=340130",
         "언어/외국어/사전": "https://book.naver.com/category/index.nhn?cate_code=340090"
     },
-    "해외도서4": {
+    "해외도서8": {
         "유아청소년/교육": "https://book.naver.com/category/index.nhn?cate_code=340020",
-        "종교/명상": "https://book.naver.com/category/index.nhn?cate_code=340110",
-        "철학/심리/역사": "https://book.naver.com/category/index.nhn?cate_code=340100",
-        "컴퓨터": "https://book.naver.com/category/index.nhn?cate_code=340050",
-        "독일": "https://book.naver.com/category/index.nhn?cate_code=340140"
+        "종교/명상": "https://book.naver.com/category/index.nhn?cate_code=340110"
     },
-    "해외도서5": {
-        "스페인": "https://book.naver.com/category/index.nhn?cate_code=340160",
+    "해외도서9": {
+        "철학/심리/역사": "https://book.naver.com/category/index.nhn?cate_code=340100",
+        "컴퓨터": "https://book.naver.com/category/index.nhn?cate_code=340050"
+    },
+    "해외도서10": {
+        "독일": "https://book.naver.com/category/index.nhn?cate_code=340140",
+        "스페인": "https://book.naver.com/category/index.nhn?cate_code=340160"
+    },
+    "해외도서11": {
         "일본도서": "https://book.naver.com/category/index.nhn?cate_code=340170",
         "프랑스": "https://book.naver.com/category/index.nhn?cate_code=340150"
     }

@@ -3,6 +3,8 @@ DOCKER_IMAGE="docker-image"
 DOCKER_TAG="test"
 CATEGORY_LIST_JSON_PATH="./src/etl/utils/static/book_category_url.json"
 
+concurrency_level=$1
+
 echo "docker local test"
 # docker-image:test 이미지 기반으로 컨테이너 exec
 # docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
@@ -23,25 +25,22 @@ run_container() {
     docker stop ${container_name}
     docker rm ${container_name}
 
-    echo "${container_name} finished"
+    echo "category ${category} is finished in ${container_name}"
 }
 
-category_lists=($(jq ". | keys[]" ${CATEGORY_LIST_JSON_PATH}))
+concurrency_level() {
+    local level=$1
+    local category_lists=($(jq ". | keys[]" ${CATEGORY_LIST_JSON_PATH}))
+    for (( j=$level; j<${#category_lists[@]}; j+=$concurrency_level )); do
+        category=${category_lists[j]}
+        port=$((8080 + level))
+        run_container "$category" "$port" "scrapping_container_${level}"
+    done &
+}
 
-for (( i=0; i<${#category_lists[@]}; i+=3 )); do
-    category=${category_lists[i]}
-    run_container "$category" "8080" "scrapping_container1"
-done &
-
-for (( i=1; i<${#category_lists[@]}; i+=3 )); do
-    category=${category_lists[i]}
-    run_container "$category" "8081" "scrapping_container2"
-done &
-
-for (( i=2; i<${#category_lists[@]}; i+=3 )); do
-    category=${category_lists[i]}
-    run_container "$category" "8082" "scrapping_container3"
-done &
+for (( i=0; i<=$concurrency_level; i+=1 )); do
+    concurrency_level "$i"
+done
 
 wait
 
