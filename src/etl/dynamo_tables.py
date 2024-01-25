@@ -86,13 +86,14 @@ class DynamoTables():
                 else:
                     self.table.update_item(
                         Key={"category":info['category']},
-                        UpdateExpression="set #info.latest_date=:date_val, #info.job_status=:status_val",
-                        ExpressionAttributeValues={
-                            ":date_val": get_date(), 
-                            ":status_val": info['status']
-                        },
+                        UpdateExpression="set #attrName1 = :attrValue1, #attrName2 = :attrValue2",
                         ExpressionAttributeNames={
-                            "#info": "info"
+                            "#attrName1": "latest_date",
+                            "#attrName2": "job_status"
+                        },
+                        ExpressionAttributeValues={
+                            ':attrValue1': get_date(),
+                            ':attrValue2': info['status'],
                         },
                         ReturnValues="UPDATED_NEW",
                     )
