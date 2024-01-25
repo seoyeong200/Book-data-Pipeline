@@ -2,14 +2,15 @@ from selenium import webdriver
 from tempfile import mkdtemp
 
 import boto3
-import json
-import os
+from botocore.exceptions import ClientError
+
+import logging
 
 from crawling.book_data_scrapper import BookDataScrapper
 from crawling.book_url_getter import BookURLGetter
 from dynamo_tables import DynamoTables
 
-
+logger = logging.getLogger(__name__)
 dynamodb = boto3.resource('dynamodb')
 
 def handler(event=None, context=None, chrome=None):
@@ -38,6 +39,7 @@ def handler(event=None, context=None, chrome=None):
         return chrome
     
     for c in event['category']:
+        print(c)
         try:
             book_table = DynamoTables(dynamodb)
             meta_table = DynamoTables(dynamodb)
@@ -54,11 +56,14 @@ def handler(event=None, context=None, chrome=None):
             scrapper = BookDataScrapper(chrome=driver_getter(), book_page_url=book_page_url)
             for book_info in scrapper.crawl_books():
                 print(book_info)
-                book_table.add_item(Item=book_info)
+                book_table.add_item(book_info)
             
             meta_table.add_item({'category': c, 'status': 'SUCCESS'})
         
-        except:
+        except ClientError as err:
+            logger.error(
+                err.response[""]
+            )
             meta_table.add_item({'category': c, 'status': 'FAIL'})
 
     return

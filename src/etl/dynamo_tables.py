@@ -86,13 +86,14 @@ class DynamoTables():
                 else:
                     self.table.update_item(
                         Key={"category":info['category']},
-                        UpdateExpression="set #info.latest_date=:date_val, #info.job_status=:status_val",
-                        ExpressionAttributeValues={
-                            ":date_val": get_date(), 
-                            ":status_val": info['status']
-                        },
+                        UpdateExpression="set #attrName1 = :attrValue1, #attrName2 = :attrValue2",
                         ExpressionAttributeNames={
-                            "#info": "info"
+                            "#attrName1": "latest_date",
+                            "#attrName2": "job_status"
+                        },
+                        ExpressionAttributeValues={
+                            ':attrValue1': get_date(),
+                            ':attrValue2': info['status'],
                         },
                         ReturnValues="UPDATED_NEW",
                     )
@@ -115,8 +116,15 @@ class DynamoTables():
         """
         try:
             response = self.get_response_of_category(category)
-            scrapped_date = response["Items"]["latest_date"]
-            scrapped_status = response["Items"]["job_status"]
+            if response["Count"] == 0: 
+                logger.info(
+                    "Category %s hasn't been made in metatable yet.",
+                    category
+                )
+                return False
+
+            scrapped_date = response["Items"][0]["latest_date"]
+            scrapped_status = response["Items"][0]["job_status"]
             if (is_same_week(scrapped_date) and scrapped_status == 'SUCCESS') \
                 or not is_same_week(scrapped_date):
                 return True
