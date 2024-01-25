@@ -24,5 +24,5 @@ functions:
       - schedule:
           rate: cron(0 12 ? * TUE *)
           input:
-          category: '소설'
+            category: '소설'
        

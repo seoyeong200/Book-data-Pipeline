@@ -1,11 +1,11 @@
 import os, json
 from bs4 import BeautifulSoup
 
-from src.etl.utils.config import get_workdir
+from utils.config import get_workdir
 
 
 class BookURLGetter:
-    def __init__(self, chrome: object, category: list) -> None:
+    def __init__(self, chrome: object, category: str) -> None:
         self.driver = chrome
         self.workdir = get_workdir()
         self.category = category
@@ -22,7 +22,7 @@ class BookURLGetter:
         """
         static json file로 카페고리 별 url 정보 저장되어있는 데이터 리턴
         """
-        book_category_filename = "etl/utils/static/book_category_url.json"
+        book_category_filename = "utils/static/book_category_url.json"
         with open(os.path.join(self.workdir, book_category_filename)) as f:
             url = json.load(f)
         self.book_category_url = url[self.category]
