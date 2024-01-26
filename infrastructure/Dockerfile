@@ -17,6 +17,9 @@ RUN wget --no-verbose -O apache-spark.tgz "https://archive.apache.org/dist/spark
 && tar -xf apache-spark.tgz -C /opt/spark --strip-components=1 \
 && rm apache-spark.tgz 
 
+COPY materials/conf/* /opt/spark/conf/
+COPY materials/jars/* /opt/spark/jars
+
 FROM builder as apache-spark
 
 WORKDIR /opt/spark
