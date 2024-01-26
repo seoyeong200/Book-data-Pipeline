@@ -40,7 +40,10 @@ RUN mkdir -p $SPARK_LOG_DIR && \
 touch $SPARK_MASTER_LOG && \
 touch $SPARK_WORKER_LOG && \
 ln -sf /dev/stdout $SPARK_MASTER_LOG && \
-ln -sf /dev/stdout $SPARK_WORKER_LOG
+ln -sf /dev/stdout $SPARK_WORKER_LOG && \
+pip3 install konlpy && \
+pip3 install nltk
+
 
 COPY start-spark.sh /
 

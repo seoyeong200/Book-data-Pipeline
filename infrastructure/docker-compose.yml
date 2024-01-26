@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   spark-master:
-    image: book-data-pipeline-spark:0.0.1
+    image: book-data-pipeline-spark:0.1.0
     ports:
       - "9090:8080"
       - "7077:7077"
@@ -15,7 +15,7 @@ services:
       - ../.env
 
   spark-worker-a:
-    image: book-data-pipeline-spark:0.0.1
+    image: book-data-pipeline-spark:0.1.0
     ports:
       - "9091:8080"
       - "7001:7000"
@@ -36,7 +36,7 @@ services:
        - ./data:/opt/spark-data
 
   spark-worker-b:
-    image: book-data-pipeline-spark:0.0.1
+    image: book-data-pipeline-spark:0.1.0
     ports:
       - "9092:8080"
       - "7002:7000"
