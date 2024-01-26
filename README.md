@@ -3,40 +3,76 @@
 
 
 
-# Architecture
-<img src="./document/architecture.png"> 
+### Pipeline Architecture
+~<img src="./document/architecture.png"> ~
+→ deprecated. will be updated
 
-네이버 책에서 카테고리별 top100 책 정보를 일주일에 한 번 스크래핑하여 <kbd>Mysql</kbd> DB에 저장합니다. 스크래핑이 완료되어 <kbd>Mysql</kbd> DB에 저장이 완료된 책 데이터는 <kbd>Sqoop</kbd>에서 수집된 날짜 디렉토리(local fs)에 parquet 형식으로 저장됩니다. 파케이 파일들을 <kbd>Spark</kbd>에서 전처리하고 Word2Vec 모댈을 적용해 줄거리 단어들을 벡터화합니다. 벡터화된 줄거리 정보도 추가하여 <kbd>mysql</kbd>에 적재합니다. 
+매주 화요일 네이버 책으로부터 카테고리별 top100 책 정보를 스크래핑하여 <kbd>aws dynamodb</kbd> 에 수집합니다. 수집된 테이블 데이터는 <kbd>aws s3</kbd> 버킷에 export되고, <kbd>spark</kbd>를 통해 전처리와 줄거리 문서의 벡터화 작업이 진행됩니다.
 
-사용자가 선호하는 책 정보가 업데이트되면 책 추천 알고리즘을 적용합니다. 선호하는 책을 네이버 책 API를 통해 줄거리 정보를 가져오고, <kbd>Spark</kbd>에서 해당 문서를 Word2Vec 모델링을 통해 벡터화합니다. <kbd>MongoDB</kbd>에 있는 책 데이터들 중 벡터화된 줄거리와 코사인 유사도가 가장 높은 다섯개의 책을 추천 결과로 반환합니다.
-
-
-# ETL process
-![img](document/etl_architecture.png)
+요청받은 책에 대해 비슷한 책을 추천 결과로 반환합니다. 이는 네이버 책에 명시된 책 줄거리 문서 데이터 간의 유사성을 기반으로 합니다. 
 
 
-# How to use
+### ETL process
+~![img](document/etl_architecture.png)~
+→ deprecated. will be updated
+
 ```bash
-cd {download_directory}/BookDataPipeline
-
-docker-compose pull
-docker-compose up -d
-docker-compose ps
+invoke.sh {concurrency_level}
 ```
-
-컨테이너들이 다 정상적으로 기동되면 파이프라인을 위한 환경구성이 완료됩니다.
-<img src="./document/compose up.png" width=500>
-
-- 에어플로우 기동
-    - 스크래핑 코드 작동
-    - 데이터 다 mysql에 스크래핑 되면 sqoop 통해서 local fs에 파케이로 저장
-    - spark에서 줄거리 전처리, 벡터화 -> mongodb에 저장
-
-- mysql에 user 테이블에 데이터 수동으로 추가
-    - 에어플로우 trigger
+- concurrency level개의 컨테이너가 동시 구동되어 해당 레벨만큼 scrapper가 병렬로 데이터 수집 작업을 진행합니다.
+    - 데이터는 dynamoDB ingested_book_table에 수집됩니다.
+    - 책의 카테고리 별 작업 status가 dynamoDB metatable에 업데이트됩니다.
+- 데이터 수집 완료 후 ingested_book_table 데이터는 s3 bucket으로 export 됩니다.
+- 로컬 환경에 spark container cluster가 생성됩니다.
+- 수집된 데이터에 대한 transform 작업이 수행됩니다.
+    - 줄거리 문서의 데이터 클리닝, 벡터화, tfidf 계산이 이루어지고, 로컬 머신 파일시스템에 parquet 형식으로 적재됩니다.
 
 
-```bash
-
+### project structure
+```
+.
+├── Dockerfile                  // lambda with docker - contain packages, dependency which is needed for web scrapping
+├── Dockerfile_from_scratch     // entire version of above file
+├── infrastructure              // for local spark cluster
+│   ├── Dockerfile              // spark image
+│   ├── apps                    // data processing, modelling pyspark script 
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── preprocess.py
+│   │   └── tfidf.py
+│   ├── dev                     // spark local test environment (spark+jupyter)
+│   │   ├── Dockerfile
+│   │   └── docker-compose.yml
+│   ├── docker-compose.yml
+│   ├── docker-compose_deprecated.yml
+│   ├── materials               // spark connector things for communicate with aws s3
+│   │   ├── conf
+│   │   │   ├── core-site.xml
+│   │   │   └── spark-defaults.conf
+│   │   └── jars
+│   │       ├── aws-java-sdk-bundle-1.11.375.jar
+│   │       └── hadoop-aws-3.2.0.jar
+│   ├── spark-submit.sh         // execute spark cluster, submit data processing spark jobs
+│   └── start-spark.sh          // spark cluster entrypoint shellscript
+├── invoke.sh                   // project entrypoint - execute ETL pipeline
+├── serverless.yml              // deploy lamdba in aws cluster
+└── src
+    ├── __init__.py
+    ├── etl
+    │   ├── __init__.py
+    │   ├── crawling                      // scrapper object
+    │   │   ├── __init__.py
+    │   │   ├── book_data_scrapper.py 
+    │   │   └── book_url_getter.py
+    │   ├── dynamo_tables.py               // dynamoDB object
+    │   ├── handler.py                     // lambda entrypoint
+    │   └── utils                          // utility related codebase, static file that has lists of book category 
+    │       ├── __init__.py
+    │       ├── config.py
+    │       └── static
+    │           └── book_category_url.json
+    └── test
+        ├── __init__.py
+        └── test_handler.py
 ```
 
