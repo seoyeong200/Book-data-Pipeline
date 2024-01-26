@@ -5,9 +5,11 @@
 ### macOS ###
 # personal
 infrastructure/mysql/
+infrastructure/data/
 deprecated/
 lambda/*.zip
 .serverless/
+
 # General
 .DS_Store
 .AppleDouble
