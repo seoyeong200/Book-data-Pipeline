@@ -11,6 +11,8 @@ services:
     environment:
       - SPARK_LOCAL_IP=spark-master
       - SPARK_WORKLOAD=master
+    env_file:
+      - ../.env
 
   spark-worker-a:
     image: cluster-apache-spark:3.0.2
@@ -27,6 +29,8 @@ services:
       - SPARK_EXECUTOR_MEMORY=1G
       - SPARK_WORKLOAD=worker
       - SPARK_LOCAL_IP=spark-worker-a
+    env_file:
+      - ../.env
     volumes:
        - ./apps:/opt/spark-apps
        - ./data:/opt/spark-data
@@ -46,12 +50,9 @@ services:
       - SPARK_EXECUTOR_MEMORY=1G
       - SPARK_WORKLOAD=worker
       - SPARK_LOCAL_IP=spark-worker-b
+    env_file:
+      - ../.env
     volumes:
         - ./apps:/opt/spark-apps
         - ./data:/opt/spark-data
-  demo-database:
-    image: postgres:11.7-alpine
-    ports: 
-      - "5432:5432"
-    environment: 
-      - POSTGRES_PASSWORD=casa1234
+
