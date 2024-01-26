@@ -5,9 +5,17 @@
 ### macOS ###
 # personal
 infrastructure/mysql/
+infrastructure/data/
+infrastructure/dev/.cache/
+infrastructure/dev/.ipynb_checkpoints/
+infrastructure/dev/.ipython/
+infrastructure/dev/.jupyter/
+infrastructure/dev/.local/
+infrastructure/dev/data/
 deprecated/
 lambda/*.zip
 .serverless/
+
 # General
 .DS_Store
 .AppleDouble
