@@ -4,8 +4,7 @@
 
 
 ### Pipeline Architecture
-~<img src="./document/architecture.png"> ~
-→ deprecated. will be updated
+<img src="./document/bookdatapipeline_1.png">
 
 매주 화요일 네이버 책으로부터 카테고리별 top100 책 정보를 스크래핑하여 <kbd>aws dynamodb</kbd> 에 수집합니다. 수집된 테이블 데이터는 <kbd>aws s3</kbd> 버킷에 export되고, <kbd>spark</kbd>를 통해 전처리와 줄거리 문서의 벡터화 작업이 진행됩니다.
 
