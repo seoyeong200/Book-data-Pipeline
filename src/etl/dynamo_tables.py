@@ -54,9 +54,9 @@ class DynamoTables():
     def add_item(self, info):
         """
         this method is tp add single item of given info parameter to the dynamo table.
-        - if the current table is related to book table, just add single book item.
-        - otherwise, if it's related to meta table, 
+        - if the current table is related to meta table, 
             update the date and status info of the given category.
+        - otherwise, just add a single item to the table.
         """
         try:
             if self.table.name == "metatable":
