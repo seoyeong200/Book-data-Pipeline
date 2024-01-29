@@ -59,20 +59,6 @@ class DynamoTables():
             update the date and status info of the given category.
         """
         try:
-            if self.table.name == "ingested_book_table":
-                self.table.put_item(
-                    Item={
-                        "bid": info["bid"],
-                        "title": info["title"],
-                        "subtitle": info["subtitle"],
-                        "author": info["author"],
-                        "image": info["image"],
-                        "rank": info["rank"],
-                        "description": info["description"],
-                        "category": info["category"],
-                    }
-                )
-
             if self.table.name == "metatable":
                 response = self.get_response_of_category(info['category'])
                 if response["Count"] == 0:
@@ -97,6 +83,8 @@ class DynamoTables():
                         },
                         ReturnValues="UPDATED_NEW",
                     )
+            else:
+                self.table.put_item(info)
 
         except ClientError as err:
             logger.error(
