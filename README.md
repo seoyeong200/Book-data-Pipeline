@@ -12,8 +12,7 @@
 
 
 ### ETL process
-~![img](document/etl_architecture.png)~
-→ deprecated. will be updated
+![img](document/etl_architecture_version2.png)
 
 ```bash
 invoke.sh {concurrency_level}
