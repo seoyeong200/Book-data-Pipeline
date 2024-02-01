@@ -1,6 +1,7 @@
 from pyspark.ml.feature import Word2Vec
 from pyspark.ml.feature import Word2VecModel
 from pyspark.sql.types import FloatType
+from pyspark.sql.window import Window
 import pyspark.sql.functions as F
 
 class Word2Vec:
@@ -39,3 +40,19 @@ class Word2Vec:
                 F.array([F.lit(v) for v in static_vector])
             )
         )
+    
+    def get_similar_books(self, df_with_cos_sim):
+        window_with_category = (
+            Window
+            .partitionBy(df_with_cos_sim['category'])
+            .orderBy(df_with_cos_sim['coSim'].desc())
+        )
+        result = (
+            df_with_cos_sim
+            .select('*', F.rank().over(window_with_category).alias('similarity_rank'))
+            .filter(
+                (F.col('similarity_rank') > 1) & (F.col('similarity_rank') <= 11)
+            )
+        )
+        return result.select('bid')
+
