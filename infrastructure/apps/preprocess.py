@@ -22,9 +22,6 @@ def clean(s):
     return clean_words
 
 def preprocess(spark, df):
-    # spark = init_spark()
-    # df = spark.read.json('/opt/spark-data/*.json')
-
     df = df.select(F.col("Item.bid.S").alias('bid'),
                     F.col("Item.title.S").alias('title'),
                     F.col("Item.subtitle.S").alias('subtitle'),
@@ -34,6 +31,9 @@ def preprocess(spark, df):
                     F.col("Item.image.S").alias('image'),
                     F.col("Item.rank.S").alias('rank')
                 )
+    
+    # null 컬럼 제거 - description not exists, or scrapping failure
+    df = df.filter(F.col('description') != "")
 
     # data preprocessing - 특수문자, 숫자 제거
     cols_remove_noise = F.udf(lambda z : remove_noise(z), StringType())
