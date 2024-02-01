@@ -6,7 +6,7 @@ services:
       - "9090:8080"
       - "7077:7077"
     volumes:
-       - ./apps:/opt/spark-apps
+       - ../src/etl/apps:/opt/spark-apps
        - ./data:/opt/spark-data
     environment:
       - SPARK_LOCAL_IP=spark-master
@@ -32,7 +32,7 @@ services:
     env_file:
       - ../.env
     volumes:
-       - ./apps:/opt/spark-apps
+       - ../src/etl/apps:/opt/spark-apps
        - ./data:/opt/spark-data
 
   spark-worker-b:
@@ -53,6 +53,5 @@ services:
     env_file:
       - ../.env
     volumes:
-        - ./apps:/opt/spark-apps
+        - ../src/etl/apps:/opt/spark-apps
         - ./data:/opt/spark-data
-
