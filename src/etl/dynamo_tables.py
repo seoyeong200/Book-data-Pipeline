@@ -61,6 +61,7 @@ class DynamoTables():
         try:
             if self.table.name == "metatable":
                 response = self.get_response_of_category(info['category'])
+                logger.info(response)
                 if response["Count"] == 0:
                     self.table.put_item(
                         Item={
@@ -84,7 +85,7 @@ class DynamoTables():
                         ReturnValues="UPDATED_NEW",
                     )
             else:
-                self.table.put_item(info)
+                self.table.put_item(Item=info)
 
         except ClientError as err:
             logger.error(
