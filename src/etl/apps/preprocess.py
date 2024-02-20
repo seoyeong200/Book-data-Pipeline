@@ -45,3 +45,5 @@ def preprocess(spark, df):
     colsClean = F.udf(lambda z : clean(z), ArrayType(StringType()))
     spark.udf.register("colsClean", colsClean)
     df = df.withColumn('preprocessed', colsClean('preprocessed'))
+
+    return df
