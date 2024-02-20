@@ -2,9 +2,11 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col,date_format
 
 import os
+import argparse
 
-from preprocess import preprocess
-from tfidf import tfidf
+from preprocess import *
+# from tfidf import tfidf
+from word2vec import Word2Vec
 
 def init_spark():
   aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -21,15 +23,35 @@ def init_spark():
     .getOrCreate()
   return spark
 
+def get_args():
+  argument_parser = argparse.ArgumentParser(description="argument that indicate which process is this work needs to do, training model or calculate similarities between each of the book.")
+  argument_parser.add_argument(
+    '--process', 
+    type=str, 
+    choices=['train', 'calculate'], 
+    default='calculate',
+    help='`train` stands for retraining the Word2Vec model, `calculate` stands for make each book a list of similar book'
+  )
+  args, unknown = argument_parser.parse_known_args()
+  return vars(args)
+
 
 if __name__ == "__main__":
   spark = init_spark()
-  s3_middle_path = "01706192738584-572ab4dc"
-  s3_uri=f"s3://book-data-pipeline-prod-serverlessdeploymentbucket-bjra5omsi63o/AWSDynamoDB/{s3_middle_path}/data"
+  s3_middle_path = os.environ.get('AWS_S3_PATH')
+  s3_uri=f"{s3_middle_path}/data"
   files = '*.json.gz'
-#   files = 'd44l3vkmeyyidfsfvf4zjuwilm.json.gz'
   df = spark.read.format('json').load(os.path.join(s3_uri, files))
 
   preprocessed_df = preprocess(spark, df)
-  tfidf_df = tfidf(preprocessed_df)
+
+  arg = get_args()
+  if arg['process'] == 'train':
+    Word2Vec(preprocessed_df).train_model()
+  elif arg['process'] == 'calculate':
+    vectorized_df = Word2Vec(preprocessed_df).get_vectorized_df()
+    _ = Word2Vec(vectorized_df).calculate()
+  else:
+    print("wrong argument. please try again with `--process train` or `--process calculate`")
+
   
