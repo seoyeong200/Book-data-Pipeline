@@ -1,6 +1,7 @@
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize 
 from konlpy.tag import Okt
+import cld3
 
 from pyspark.sql.types import StringType, ArrayType
 from pyspark.sql import functions as F
@@ -14,13 +15,35 @@ def remove_noise(text):
     return text
 
 def clean(s):
-    okt = Okt()
-    clean_words = []
-    for word in okt.pos(s, stem=True):
-        if word[1] in ['Noun', 'Verb', 'Adjective']:
-            clean_words.append(word[0])
-    return clean_words
+    """ 
+    Detect the language of the given column value s.
+    - lower case and remove stopwords if its' english.
+    - otherwise, regard it as korean and do speech tagging job 
+    (remaining only nown, verb, adjective)
+    """
+    try:
+        language = cld3.get_language(s)
+        if language.language == 'en':
+            s = s.lower()
+            def remove_stopwords(text):
+                stop_words = set(stopwords.words('english'))
+                word_tokens = text.split()
+                clean_words = [word for word in word_tokens if word not in stop_words]
+                return clean_words
+            return remove_stopwords(s)
+        else:
+            def speech_tagging(text):
+                okt = Okt()
+                clean_words = []
+                for word in okt.pos(text, stem=True):
+                    if word[1] in ['Noun', 'Verb', 'Adjective']:
+                        clean_words.append(word[0])
+                return clean_words
+            return speech_tagging(s)
+    except:
+        return []
 
+            
 def preprocess(spark, df):
     df = df.select(F.col("Item.bid.S").alias('bid'),
                     F.col("Item.title.S").alias('title'),
