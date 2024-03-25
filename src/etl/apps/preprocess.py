@@ -1,7 +1,7 @@
+import cld3, nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize 
 from konlpy.tag import Okt
-import cld3
 
 from pyspark.sql.types import StringType, ArrayType
 from pyspark.sql import functions as F
@@ -25,6 +25,7 @@ def clean(s):
         language = cld3.get_language(s)
         if language.language == 'en':
             s = s.lower()
+            nltk.download('stopwords')
             def remove_stopwords(text):
                 stop_words = set(stopwords.words('english'))
                 word_tokens = text.split()
@@ -64,7 +65,7 @@ def preprocess(spark, df):
     df = df.withColumn('preprocessed', cols_remove_noise('description'))
 
 
-    # data preprocessing - 명사, 동사, 형용사 만 남기기
+    # data preprocessing - 명사, 동사, 형용사만 남기기
     colsClean = F.udf(lambda z : clean(z), ArrayType(StringType()))
     spark.udf.register("colsClean", colsClean)
     df = df.withColumn('preprocessed', colsClean('preprocessed'))
