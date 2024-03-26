@@ -7,6 +7,9 @@ import argparse
 from preprocess import *
 # from tfidf import tfidf
 from word2vec import Word2Vec
+from utils.logger import Logging
+
+logger = Logging("SparkMain").get_logger()
 
 def init_spark():
   aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -50,7 +53,7 @@ if __name__ == "__main__":
     Word2Vec(preprocessed_df).train_model()
   elif arg['process'] == 'calculate':
     vectorized_df = Word2Vec(preprocessed_df).get_vectorized_df()
-    _ = Word2Vec(vectorized_df).calculate()
+    _ = Word2Vec(vectorized_df, spark).calculate()
   else:
     print("wrong argument. please try again with `--process train` or `--process calculate`")
 

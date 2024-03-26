@@ -4,13 +4,13 @@ from tempfile import mkdtemp
 import boto3
 from botocore.exceptions import ClientError
 
-import logging
-
 from crawling.book_data_scrapper import BookDataScrapper
 from crawling.book_url_getter import BookURLGetter
 from dynamo_tables import DynamoTables
+from utils.logger import Logging
 
-logger = logging.getLogger(__name__)
+
+logger = Logging("Handler").get_logger()
 dynamodb = boto3.resource('dynamodb')
 
 def handler(event=None, context=None, chrome=None):
@@ -39,14 +39,25 @@ def handler(event=None, context=None, chrome=None):
         return chrome
     
     for c in event['category']:
-        print(c)
         try:
             book_table = DynamoTables(dynamodb)
             meta_table = DynamoTables(dynamodb)
 
-            if not book_table.exists("ingested_book_table") \
-                or not meta_table.exists("metatable") \
-                or meta_table.already_gathered_category(c):
+            if not book_table.exists("ingested_book_table"):
+                logger.info(
+                    "ingested_book_table does not exist"
+                )
+                continue
+            if not meta_table.exists("metatable"):
+                logger.info(
+                    "meta table does not exist."
+                )
+                continue
+            if meta_table.already_gathered_category(c):
+                logger.info(
+                    "book data in category %s, data is already scrapped.",
+                    c
+                )
                 continue
 
             url_getter = BookURLGetter(chrome=driver_getter(), category=c)
@@ -55,14 +66,19 @@ def handler(event=None, context=None, chrome=None):
             
             scrapper = BookDataScrapper(chrome=driver_getter(), book_page_url=book_page_url)
             for book_info in scrapper.crawl_books():
-                print(book_info)
+                logger.info(
+                    book_info
+                )
                 book_table.add_item(book_info)
             
             meta_table.add_item({'category': c, 'status': 'SUCCESS'})
         
         except ClientError as err:
             logger.error(
-                err.response[""]
+                "Clinet error during process with %s. Here's why: %s %s",
+                c,
+                err.response["Error"]["Code"],
+                err.response["Error"]["Message"]
             )
             meta_table.add_item({'category': c, 'status': 'FAIL'})
 
