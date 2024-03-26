@@ -1,12 +1,12 @@
-import logging
 import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 
 from utils.config import get_date, is_same_week
+from utils.logger import Logging
 
 
-logger = logging.getLogger(__name__)
+logger = Logging("DynamoTables").get_logger()
 
 
 class DynamoTables():
@@ -61,6 +61,7 @@ class DynamoTables():
         try:
             if self.table.name == "metatable":
                 response = self.get_response_of_category(info['category'])
+                logger.info(response)
                 if response["Count"] == 0:
                     self.table.put_item(
                         Item={
@@ -84,7 +85,7 @@ class DynamoTables():
                         ReturnValues="UPDATED_NEW",
                     )
             else:
-                self.table.put_item(info)
+                self.table.put_item(Item=info)
 
         except ClientError as err:
             logger.error(
@@ -113,13 +114,20 @@ class DynamoTables():
 
             scrapped_date = response["Items"][0]["latest_date"]
             scrapped_status = response["Items"][0]["job_status"]
-            if (is_same_week(scrapped_date) and scrapped_status == 'SUCCESS') \
-                or not is_same_week(scrapped_date):
+
+            if is_same_week(scrapped_date) and scrapped_status == 'SUCCESS':
+                logger.info(
+                    "Category %s is already ingested in %s.",
+                    category,
+                    scrapped_date
+                )
                 return True
+            else:
+                return False
 
         except ClientError as err:
             logger.error(
-                "Couldn't query movies released in %s from table %s. Here's why: %s %s",
+                "Couldn't query book from table %s. Here's why: %s %s",
                 self.table.name,
                 err.response["Error"]["Code"],
                 err.response["Error"]["Message"],

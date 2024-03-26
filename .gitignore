@@ -12,6 +12,7 @@ infrastructure/dev/.ipython/
 infrastructure/dev/.jupyter/
 infrastructure/dev/.local/
 infrastructure/dev/data/
+infrastructure/dev/nltk_data/
 deprecated/
 lambda/*.zip
 .serverless/

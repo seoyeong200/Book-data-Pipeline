@@ -51,7 +51,7 @@ RUN cd /usr/local/spark-3.3.1-bin-hadoop3/jars && \
 RUN chown -R jovyan:jovyan /usr/local/spark-3.3.1-bin-hadoop3/jars
 
 # Python 패키지 설치
-RUN pip install --no-cache-dir spylon-kernel py4j==0.10.9.5 && \
+RUN pip install --no-cache-dir spylon-kernel py4j==0.10.9.5 gensim konlpy nltk && \
     python -m spylon_kernel install
 
 # Python 패키지 설치를 위해 jovyan으로 다시 전환
