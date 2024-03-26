@@ -15,7 +15,7 @@ run_container() {
     local container_name=$3
 
     docker run -d -p ${port}:8080 \
-        --env-file .env -v ./src/etl:/var/task \
+        --env-file .env_ingest -v ./src/etl:/var/task \
         --name ${container_name} ${DOCKER_IMAGE}:${DOCKER_TAG}
 
     tmp="${category%\"}"
