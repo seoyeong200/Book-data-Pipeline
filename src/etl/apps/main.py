@@ -9,7 +9,7 @@ from preprocess import *
 from word2vec import Word2Vec
 from utils.logger import Logging
 
-logger = Logging("SparkMain").get_logger()
+logger = Logging("SparkMain").get_stream_logger()
 
 def init_spark():
   aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')

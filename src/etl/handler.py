@@ -10,7 +10,7 @@ from dynamo_tables import DynamoTables
 from utils.logger import Logging
 
 
-logger = Logging("Handler").get_logger()
+logger = Logging("Handler").get_file_logger()
 dynamodb = boto3.resource('dynamodb')
 
 def handler(event=None, context=None, chrome=None):

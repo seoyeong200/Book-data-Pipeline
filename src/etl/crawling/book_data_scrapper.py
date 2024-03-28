@@ -4,7 +4,7 @@ from ratelimit import limits, sleep_and_retry
 
 from utils.logger import Logging
 
-logger = Logging("BookDataScrapper").get_logger()
+logger = Logging("BookDataScrapper").get_file_logger()
 
 class BookDataScrapper():
    def __init__(self, chrome: object, book_page_url: list) -> None:

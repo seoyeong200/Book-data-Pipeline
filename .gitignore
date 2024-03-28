@@ -179,8 +179,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-.env_ingest
-.env_transform
+.env.ingest
+.env.transform
 
 # Spyder project settings
 .spyderproject

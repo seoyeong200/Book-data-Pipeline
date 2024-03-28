@@ -6,7 +6,7 @@ from utils.config import get_date, is_same_week
 from utils.logger import Logging
 
 
-logger = Logging("DynamoTables").get_logger()
+logger = Logging("DynamoTables").get_file_logger()
 
 
 class DynamoTables():
@@ -41,7 +41,7 @@ class DynamoTables():
                     writer.put_item(Item=book)
         except ClientError as err:
             logger.error(
-                "Couln't load data into table %s. Here's why: %s %s",
+                "Couldn't load data into table %s. Here's why: %s %s",
                 self.table.name,
                 err.response["Error"]["Code"],
                 err.response["Error"]["Message"],
