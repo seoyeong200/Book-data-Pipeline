@@ -12,7 +12,7 @@ services:
       - SPARK_LOCAL_IP=spark-master
       - SPARK_WORKLOAD=master
     env_file:
-      - ../.env_transform
+      - ../.env.transform
 
   spark-worker-a:
     image: book-data-pipeline-spark:0.1.0
@@ -30,7 +30,7 @@ services:
       - SPARK_WORKLOAD=worker
       - SPARK_LOCAL_IP=spark-worker-a
     env_file:
-      - ../.env_transform
+      - ../.env.transform
     volumes:
        - ../src:/opt/spark-apps/src
        - ./data:/opt/spark-data
@@ -51,7 +51,7 @@ services:
       - SPARK_WORKLOAD=worker
       - SPARK_LOCAL_IP=spark-worker-b
     env_file:
-      - ../.env_transform
+      - ../.env.transform
     volumes:
         - ../src:/opt/spark-apps/src
         - ./data:/opt/spark-data
