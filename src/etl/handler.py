@@ -10,7 +10,7 @@ from dynamo_tables import DynamoTables
 from utils.logger import Logging
 
 
-logger = Logging("Handler").get_file_logger()
+logger = Logging("Handler").get_logger()
 dynamodb = boto3.resource('dynamodb')
 
 def handler(event=None, context=None, chrome=None):
@@ -65,13 +65,17 @@ def handler(event=None, context=None, chrome=None):
             book_page_url = url_getter.get_book_page_url()
             
             scrapper = BookDataScrapper(chrome=driver_getter(), book_page_url=book_page_url)
-            for book_info in scrapper.crawl_books():
-                logger.info(
-                    book_info
-                )
-                book_table.add_item(book_info)
-            
-            meta_table.add_item({'category': c, 'status': 'SUCCESS'})
+            crawl_books_generator = scrapper.crawl_books()
+            if crawl_books_generator:
+                for book_info in scrapper.crawl_books():
+                    logger.info(
+                        book_info
+                    )
+                    book_table.add_item(book_info)
+                
+                meta_table.add_item({'category': c, 'status': 'SUCCESS'})
+            else:
+                meta_table.add_item({'category': c, 'status': 'FAIL'})
         
         except ClientError as err:
             logger.error(
