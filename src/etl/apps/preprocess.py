@@ -1,15 +1,17 @@
-import cld3, nltk
+import re
+
+import nltk
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize 
 from konlpy.tag import Okt
 
 from pyspark.sql.types import StringType, ArrayType
 from pyspark.sql import functions as F
 
-# /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/spark-apps/test.py
+from etl.utils.logger import Logging
+
+logger = Logging("PreProcess").get_logger()
 
 def remove_noise(text):
-    import re
     text = re.sub(r'[^\w\s]', '', text)  # 특수 문자 제거
     text = re.sub(r'\d+', '', text)      # 숫자 제거
     return text
@@ -22,8 +24,9 @@ def clean(s):
     (remaining only nown, verb, adjective)
     """
     try:
-        language = cld3.get_language(s)
-        if language.language == 'en':
+        alphabet_s = re.sub(r'[^a-zA-Z]', '', s)
+        language = 'kr' if len(alphabet_s) < len(s)//2 else 'en'
+        if language == 'en':
             s = s.lower()
             nltk.download('stopwords')
             def remove_stopwords(text):
@@ -64,10 +67,19 @@ def preprocess(spark, df):
     spark.udf.register("cols_remove_noise", cols_remove_noise)
     df = df.withColumn('preprocessed', cols_remove_noise('description'))
 
+    logger.info(
+        "After remove noise from description column\n%s",
+        df.show()
+    )
 
     # data preprocessing - 명사, 동사, 형용사만 남기기
     colsClean = F.udf(lambda z : clean(z), ArrayType(StringType()))
     spark.udf.register("colsClean", colsClean)
     df = df.withColumn('preprocessed', colsClean('preprocessed'))
+
+    logger.info(
+        "After tokenizing the preprocessed column\n%s",
+        df.show()
+    )
 
     return df

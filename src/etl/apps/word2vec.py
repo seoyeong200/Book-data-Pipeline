@@ -7,9 +7,9 @@ from pyspark.sql.types import FloatType, ArrayType
 from pyspark.sql.window import Window
 import pyspark.sql.functions as F
 
-from utils.logger import Logging
+from etl.utils.logger import Logging
 
-logger = Logging("Word2Vec").get_stream_logger()
+logger = Logging("Word2Vec").get_logger()
 
 class Word2Vec:
     def __init__(self, df, spark=None) -> None:
