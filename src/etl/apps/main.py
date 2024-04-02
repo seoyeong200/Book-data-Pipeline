@@ -7,9 +7,9 @@ import argparse
 from preprocess import *
 # from tfidf import tfidf
 from word2vec import Word2Vec
-from utils.logger import Logging
+from etl.utils.logger import Logging
 
-logger = Logging("SparkMain").get_stream_logger()
+logger = Logging("SparkMain").get_logger()
 
 def init_spark():
   aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -45,8 +45,16 @@ if __name__ == "__main__":
   s3_uri=f"{s3_middle_path}/data"
   files = '*.json.gz'
   df = spark.read.format('json').load(os.path.join(s3_uri, files))
+  logger.info(
+    "read dataframe from s3\n%s",
+    df
+  )
 
   preprocessed_df = preprocess(spark, df)
+  logger.info(
+    "final preprocessed dataframe\n%s",
+    preprocessed_df
+  )
 
   arg = get_args()
   if arg['process'] == 'train':
@@ -55,6 +63,8 @@ if __name__ == "__main__":
     vectorized_df = Word2Vec(preprocessed_df).get_vectorized_df()
     _ = Word2Vec(vectorized_df, spark).calculate()
   else:
-    print("wrong argument. please try again with `--process train` or `--process calculate`")
+    logger.warn(
+      "wrong argument. please try again with `--process train` or `--process calculate`"
+    )
 
   

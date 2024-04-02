@@ -6,7 +6,7 @@ from utils.config import get_date, is_same_week
 from utils.logger import Logging
 
 
-logger = Logging("DynamoTables").get_file_logger()
+logger = Logging("DynamoTables").get_logger()
 
 
 class DynamoTables():
@@ -59,9 +59,14 @@ class DynamoTables():
         - otherwise, just add a single item to the table.
         """
         try:
+            # add meta data
             if self.table.name == "metatable":
                 response = self.get_response_of_category(info['category'])
-                logger.info(response)
+                logger.info(
+                    "return value of metatable. %s",
+                    response
+                )
+                # meta record that initially scrapped and added to the metatable.
                 if response["Count"] == 0:
                     self.table.put_item(
                         Item={
@@ -70,6 +75,7 @@ class DynamoTables():
                             "job_status": info['status']
                         }
                     )
+                # meta record that is already scrapped once before.
                 else:
                     self.table.update_item(
                         Key={"category":info['category']},
@@ -84,6 +90,7 @@ class DynamoTables():
                         },
                         ReturnValues="UPDATED_NEW",
                     )
+            # add nook data
             else:
                 self.table.put_item(Item=info)
 

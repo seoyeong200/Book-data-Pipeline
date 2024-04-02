@@ -23,8 +23,10 @@ class BookURLGetter:
         static json file로 카페고리 별 url 정보 저장되어있는 데이터 리턴
         """
         book_category_filename = "utils/static/book_category_url.json"
-        with open(os.path.join(self.workdir, book_category_filename)) as f:
+        book_category_filepath = os.path.join(self.workdir, book_category_filename)
+        with open(book_category_filepath) as f:
             url = json.load(f)
+        print(url)
         self.book_category_url = url[self.category]
         
     def get_book_page_urls_scrapper(self) -> list:
@@ -53,3 +55,6 @@ class BookURLGetter:
             book_page_urls.append(link)
 
         return book_page_urls
+
+if __name__=='__main__':
+    BookURLGetter()
