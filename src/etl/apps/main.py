@@ -53,15 +53,17 @@ if __name__ == "__main__":
   preprocessed_df = preprocess(spark, df)
   logger.info(
     "final preprocessed dataframe\n%s",
-    preprocessed_df
+    preprocessed_df.show()
   )
 
   arg = get_args()
   if arg['process'] == 'train':
     Word2Vec(preprocessed_df).train_model()
+
   elif arg['process'] == 'calculate':
     vectorized_df = Word2Vec(preprocessed_df).get_vectorized_df()
     _ = Word2Vec(vectorized_df, spark).calculate()
+
   else:
     logger.warn(
       "wrong argument. please try again with `--process train` or `--process calculate`"
