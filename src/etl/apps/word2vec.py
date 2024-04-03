@@ -1,11 +1,13 @@
-from pyspark.ml.feature import Word2Vec as W2V
-from pyspark.ml.feature import Word2VecModel
+from pyspark.ml.feature import Word2Vec as W2V, Word2VecModel, Normalizer
 from pyspark.ml.linalg import DenseVector
+from pyspark.mllib.linalg.distributed import IndexedRow, IndexedRowMatrix
 
 from pyspark.sql import DataFrame
 from pyspark.sql.types import FloatType, ArrayType
 from pyspark.sql.window import Window
 import pyspark.sql.functions as F
+
+import numpy as np
 
 from etl.utils.logger import Logging
 
@@ -34,13 +36,81 @@ class Word2Vec:
             model_with_preprocessed_col.getVectors().show()
         )
 
+
+    def calculate(self):
+        self.df.createOrReplaceTempView('vectorized_df')
+        incremental_idx_colname = 'id'
+        normalized_vector_colname = 'norm'
+        # make incremental id column starts from 1 (n=number of record of vectorized_df)
+        vectorized_df = self.spark.sql(f"""
+                                select row_number() over (order by bid) as {incremental_idx_colname}, * 
+                                from vectorized_df"""
+                            )
+        logger.info(
+            "vectorized_df: %s",
+            vectorized_df.show()
+        )
+        
+        # calculate each outputCol vector's L2 norm
+        normalizer = Normalizer(inputCol=self.outputCol, outputCol=normalized_vector_colname)
+        normalized_vector_df = normalizer.transform(vectorized_df)
+        logger.info(
+            "normalized_vector_df: %s",
+            normalized_vector_df.show()
+        )
+
+        # make n*n cosine similarity matrix
+        mat = (
+            IndexedRowMatrix(
+                normalized_vector_df
+                    .select(incremental_idx_colname, normalized_vector_colname)
+                    .rdd.map(lambda row: IndexedRow(row.id, row.norm.toArray()))
+            )
+            .toBlockMatrix()
+        )
+        dot = mat.multiply(mat.transpose()) # BlockMatrix object  
+        logger.info(
+            "cosine similaity vector is calculated."
+        )
+        
+        # get the most similar description based on cosine similarties matrix
+        dot_df = dot.toIndexedRowMatrix().rows.toDF()
+        dot_df.write.parquet("./dot_df.parquet")
+        vectorized_df.write.parquet("./vectorized_df.parquet")
+        def top_elements(vector):
+            """
+            vector : cosine similaity vector between book x and every other book
+
+            return top 10 value and in index of the values in the vector
+            """
+            return np.argsort(vector)[-2:][::-1].tolist()
+
+        top_elements_udf = F.udf(top_elements)
+
+        dot_df = dot_df.withColumn("most_similar_idx", top_elements_udf(F.col("vector")))
+
+        vectorized_df = (
+            vectorized_df
+            .join(
+                dot_df, vectorized_df[incremental_idx_colname] == dot_df["index"] + 1, "inner"
+            )
+            .select(vectorized_df["*"],dot_df["most_similar_idx"])
+        )
+        vectorized_df.write.parquet("./vectorized_df_sim.parquet")
+        logger.info(
+            "vectorized_df after getting the indices of the most similar book%s",
+            vectorized_df.show()
+        )
+
+
+
     """TODO
     로직을 모킹해둔 테스트코드를 작성해서 수정한 코드를 테스트하기 위해 무거운 연산을 다 해보지 않고도 
     간단하게, 가볍게 코드 안정성을 테스트해불 수 있는 환경이 갖춰져있으면 좋을 것 같다. 
     """
-    def calculate(self):
+    def __calculate(self):
         def calculate_with_every_other_records(record):
-            similarity_with_record_df = self .calcuate_simiarity(record)
+            similarity_with_record_df = self.calcuate_simiarity(record)
             print(f'calculate each similarity between record and every records\n{similarity_with_record_df}')
 
             similar_book_with_record_list = self.get_similar_books(similarity_with_record_df)
