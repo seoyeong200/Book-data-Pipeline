@@ -2,6 +2,9 @@ from bs4 import BeautifulSoup
 import time, random
 from ratelimit import limits, sleep_and_retry
 
+from utils.logger import Logging
+
+logger = Logging("BookDataScrapper").get_logger()
 
 class BookDataScrapper():
    def __init__(self, chrome: object, book_page_url: list) -> None:
@@ -15,7 +18,10 @@ class BookDataScrapper():
       리스트로 받아온 책의 각 세부 url 안에 들어가서 순위, 제목, 저자, 이미지, 책내용 받아오기
       """
       for index, item in enumerate(self.book_page_url):
-            print(item)
+            logger.info(
+               "Start Scrapping in %s.",
+               item
+            )
             code, page, urls = item
             for url in urls:
                time.sleep(random.uniform(1, 3))

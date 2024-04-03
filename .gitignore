@@ -12,6 +12,7 @@ infrastructure/dev/.ipython/
 infrastructure/dev/.jupyter/
 infrastructure/dev/.local/
 infrastructure/dev/data/
+infrastructure/dev/nltk_data/
 deprecated/
 lambda/*.zip
 .serverless/
@@ -178,6 +179,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.env.ingest
+.env.transform
 
 # Spyder project settings
 .spyderproject

@@ -1,6 +1,6 @@
 #!/bin/bash
-DOCKER_IMAGE="docker-image"
-DOCKER_TAG="test"
+DOCKER_IMAGE="book-data-pipeline-ingest"
+DOCKER_TAG="latest"
 CATEGORY_LIST_JSON_PATH="./src/etl/utils/static/book_category_url.json"
 
 concurrency_level=$1
@@ -15,7 +15,9 @@ run_container() {
     local container_name=$3
 
     docker run -d -p ${port}:8080 \
-        --env-file .env -v ./src/etl:/var/task \
+        --env-file .env.ingest \
+        -v ./src/etl:/var/task \
+        -v ./infrastructure/data/log/ingest:/var/log \
         --name ${container_name} ${DOCKER_IMAGE}:${DOCKER_TAG}
 
     tmp="${category%\"}"
