@@ -2,7 +2,7 @@ import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 
-from utils.config import get_date, is_same_week
+from utils.utils import get_date, is_same_week
 from utils.logger import Logging
 
 
