@@ -75,15 +75,13 @@ class Word2Vec:
         
         # get the most similar description based on cosine similarties matrix
         dot_df = dot.toIndexedRowMatrix().rows.toDF()
-        dot_df.write.parquet("./dot_df.parquet")
-        vectorized_df.write.parquet("./vectorized_df.parquet")
         def top_elements(vector):
             """
             vector : cosine similaity vector between book x and every other book
 
             return top 10 value and in index of the values in the vector
             """
-            return np.argsort(vector)[-2:][::-1].tolist()
+            return np.argsort(vector)[-11:-1][::-1].tolist()
 
         top_elements_udf = F.udf(top_elements)
 
@@ -96,6 +94,7 @@ class Word2Vec:
             )
             .select(vectorized_df["*"],dot_df["most_similar_idx"])
         )
+        
         vectorized_df.write.parquet("./vectorized_df_sim.parquet")
         logger.info(
             "vectorized_df after getting the indices of the most similar book%s",
