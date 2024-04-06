@@ -57,10 +57,14 @@ services:
         - ./data:/opt/spark-data
 
   db:
-    image: postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: bookDB
       POSTGRES_USER: ${DB_USER}  # docker-compose --env-file .env.transform up -d
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql
+
+    
