@@ -41,7 +41,7 @@ touch $SPARK_MASTER_LOG && \
 touch $SPARK_WORKER_LOG && \
 ln -sf /dev/stdout $SPARK_MASTER_LOG && \
 ln -sf /dev/stdout $SPARK_WORKER_LOG && \
-pip3 install konlpy, nltk, wheel, pycld3
+pip3 install konlpy nltk wheel pycld3
 
 
 COPY start-spark.sh /

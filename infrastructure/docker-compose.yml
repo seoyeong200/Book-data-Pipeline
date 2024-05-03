@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   spark-master:
-    image: book-data-pipeline-spark:0.1.0
+    image: book-data-pipeline-spark:0.1.1
     ports:
       - "9090:8080"
       - "7077:7077"
@@ -15,12 +15,13 @@ services:
       - ../.env.transform
 
   spark-worker-a:
-    image: book-data-pipeline-spark:0.1.0
+    image: book-data-pipeline-spark:0.1.1
     ports:
       - "9091:8080"
       - "7001:7000"
     depends_on:
       - spark-master
+      - postgreDB
     environment:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_WORKER_CORES=1
@@ -36,12 +37,13 @@ services:
        - ./data:/opt/spark-data
 
   spark-worker-b:
-    image: book-data-pipeline-spark:0.1.0
+    image: book-data-pipeline-spark:0.1.1
     ports:
       - "9092:8080"
       - "7002:7000"
     depends_on:
       - spark-master
+      - postgreDB
     environment:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_WORKER_CORES=1
@@ -56,15 +58,13 @@ services:
         - ../src:/opt/spark-apps/src
         - ./data:/opt/spark-data
 
-  db:
+  postgreDB:
     image: postgres:latest
     ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: bookDB
-      POSTGRES_USER: ${DB_USER}  # docker-compose --env-file .env.transform up -d
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      - "5431:5432"
+    env_file:
+      - ../.env.transform
     volumes:
-      - ./data:/var/lib/postgresql
+      - ./data/data:/var/lib/postgresql/data
+    restart: always
 
-    

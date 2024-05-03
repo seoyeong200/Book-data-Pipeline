@@ -27,6 +27,7 @@ def init_spark():
     .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")\
     .config('spark.jars.packages', '/opt/spark/jars/hadoop-aws-3.2.0.jar')\
     .config('spark.jars.packages', '/opt/spark/jars/aws-java-sdk-bundle-1.11.375.jar')\
+    .config('spark.jars.packages', '/opt/spark/jars/postgresql-42.7.3.jar')\
     .getOrCreate()
   return spark
 
