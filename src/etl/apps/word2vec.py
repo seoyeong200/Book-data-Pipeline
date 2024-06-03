@@ -20,6 +20,10 @@ class Word2Vec:
         self.w2v_model_path = '/opt/spark-data/model_w2v'
         self.inputCol = "preprocessed"
         self.outputCol = "vectorized"
+        
+    def get_vectorized_df(self):
+        loaded_w2v = Word2VecModel.load(self.w2v_model_path)
+        return loaded_w2v.transform(self.df)
 
     def train_model(self):
         w2v = W2V(
